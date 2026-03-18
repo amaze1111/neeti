@@ -12,15 +12,15 @@
 // ─── Zones ────────────────────────────────────────────────────────────────────
 
 const ZONES = [
-  { name: 'Northgate',      capacity: 11, majority: 6,  points: 11, adjacentZones: [1, 2, 4],          volatile: true },
-  { name: 'Millbrook',      capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 2, 3],          volatile: true },
-  { name: 'Harborview',     capacity: 6,  majority: 4,  points: 6,  adjacentZones: [0, 1, 4, 5],       volatile: true },
-  { name: 'Westfield',      capacity: 9,  majority: 5,  points: 9,  adjacentZones: [1, 2, 4, 6],       volatile: true },
-  { name: 'Capitol Hill',   capacity: 5,  majority: 3,  points: 5,  adjacentZones: [0, 2, 3, 5, 6, 7], volatile: true },
-  { name: 'Eastport',       capacity: 9,  majority: 5,  points: 9,  adjacentZones: [2, 4, 7, 8],       volatile: true },
-  { name: 'Riverside',      capacity: 6,  majority: 4,  points: 6,  adjacentZones: [3, 4, 7],          volatile: true },
-  { name: 'Southdown',      capacity: 11, majority: 6,  points: 11, adjacentZones: [4, 5, 6, 8],       volatile: true },
-  { name: 'Bayshore',       capacity: 6,  majority: 4,  points: 6,  adjacentZones: [5, 7],             volatile: true },
+  { name: 'Northgate',    capacity: 11, majority: 6,  points: 11, adjacentZones: [1, 2, 3, 4, 5],       volatile: true },
+  { name: 'Millbrook',    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 3],                volatile: true },
+  { name: 'Harborview',   capacity: 6,  majority: 4,  points: 6,  adjacentZones: [0, 5],                volatile: true },
+  { name: 'Westfield',    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 1, 4, 6],          volatile: true },
+  { name: 'Capitol Hill', capacity: 5,  majority: 3,  points: 5,  adjacentZones: [0, 3, 5, 6, 7, 8],   volatile: true },
+  { name: 'Eastport',     capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 2, 4, 8],          volatile: true },
+  { name: 'Riverside',    capacity: 6,  majority: 4,  points: 6,  adjacentZones: [3, 4, 7],             volatile: true },
+  { name: 'Southdown',    capacity: 11, majority: 6,  points: 11, adjacentZones: [4, 6, 8],             volatile: true },
+  { name: 'Bayshore',     capacity: 6,  majority: 4,  points: 6,  adjacentZones: [4, 5, 7],             volatile: true },
 ];
 
 // ─── Ideology Cards ───────────────────────────────────────────────────────────
