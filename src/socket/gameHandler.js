@@ -55,6 +55,8 @@ module.exports = function attachWebSocket(server) {
       switch (event) {
         case 'room:join':             await handleRoomJoin(ws, user, payload); break;
         case 'room:ready':            await handleReady(ws, user, payload); break;
+        case 'ping':                  break; // keepalive — no response needed
+        case 'room:leave':            handleRoomLeave(ws); break;
         case 'game:answer_card':      await handleMutate(ws, payload.roomCode, s => engine.answerCard(s, ws._slot, payload.choice)); break;
         case 'game:influence_voter':  await handleMutate(ws, payload.roomCode, s => engine.influenceVoterCard(s, ws._slot, payload.voterCardId, payload.zoneIndex)); break;
         case 'game:gerrymander':      await handleMutate(ws, payload.roomCode, s => engine.gerrymander(s, ws._slot, payload.fromZoneIndex, payload.toZoneIndex, payload.pegOwnerSlot, payload.rightsZoneIndex)); break;
@@ -93,6 +95,20 @@ module.exports = function attachWebSocket(server) {
 };
 
 // ─── Handlers ─────────────────────────────────────────────────────────────────
+
+// ─── Leave Room (client navigated away — keep room alive) ─────────────────────
+
+function handleRoomLeave(ws) {
+  const code = ws._roomCode;
+  if (!code) return;
+  const clients = rooms.get(code);
+  if (clients) {
+    clients.delete(ws);
+    if (clients.size === 0) rooms.delete(code);
+  }
+  ws._roomCode = null;
+  // Do NOT delete the room or game state — player can rejoin
+}
 
 async function handleRoomJoin(ws, user, { roomCode }) {
   const code = roomCode?.toUpperCase();
