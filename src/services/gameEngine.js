@@ -12,175 +12,278 @@
 // ─── Zones ────────────────────────────────────────────────────────────────────
 
 const ZONES = [
-  { name: 'Northgate',    capacity: 11, majority: 6,  points: 11, adjacentZones: [1, 2, 3, 4, 5],       volatile: true },
-  { name: 'Millbrook',    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 3],                volatile: true },
-  { name: 'Harborview',   capacity: 6,  majority: 4,  points: 6,  adjacentZones: [0, 5],                volatile: true },
-  { name: 'Westfield',    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 1, 4, 6],          volatile: true },
-  { name: 'Capitol Hill', capacity: 5,  majority: 3,  points: 5,  adjacentZones: [0, 3, 5, 6, 7, 8],   volatile: true },
-  { name: 'Eastport',     capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 2, 4, 8],          volatile: true },
-  { name: 'Riverside',    capacity: 6,  majority: 4,  points: 6,  adjacentZones: [3, 4, 7],             volatile: true },
-  { name: 'Southdown',    capacity: 11, majority: 6,  points: 11, adjacentZones: [4, 6, 8],             volatile: true },
-  { name: 'Bayshore',     capacity: 6,  majority: 4,  points: 6,  adjacentZones: [4, 5, 7],             volatile: true },
+  { name: 'Hastinapura',    capacity: 11, majority: 6,  points: 11, adjacentZones: [1, 2, 3, 4, 5],       volatile: true },
+  { name: 'Gandhara',    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 3],                volatile: true },
+  { name: 'Anga',   capacity: 6,  majority: 4,  points: 6,  adjacentZones: [0, 5],                volatile: true },
+  { name: 'Matsya',    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 1, 4, 6],          volatile: true },
+  { name: 'Kurukshetra', capacity: 5,  majority: 3,  points: 5,  adjacentZones: [0, 3, 5, 6, 7, 8],   volatile: true },
+  { name: 'Kashi',     capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 2, 4, 8],          volatile: true },
+  { name: 'Panchala',    capacity: 6,  majority: 4,  points: 6,  adjacentZones: [3, 4, 7],             volatile: true },
+  { name: 'Magadha',    capacity: 11, majority: 6,  points: 11, adjacentZones: [4, 6, 8],             volatile: true },
+  { name: 'Videha',     capacity: 6,  majority: 4,  points: 6,  adjacentZones: [4, 5, 7],             volatile: true },
 ];
 
-// ─── Ideology Cards ───────────────────────────────────────────────────────────
+// ─── Shastra Cards (Dilemmas of the Sabha) ───────────────────────────────────
 
 const IDEOLOGY_CARDS = [
-  { id: 'ic_01', question: 'Should corporations be allowed to fund political campaigns without limits?',
-    a: { text: 'Yes — money is speech, and free markets fuel democracy.', ideology: 'corporatist', resources: { gold: 2, sway: 1 } },
-    b: { text: 'No — it corrupts democracy and silences ordinary citizens.', ideology: 'progressive', resources: { cred: 2, press: 1 } } },
-  { id: 'ic_02', question: 'Should the government prioritize national identity over multiculturalism?',
-    a: { text: 'Yes — a shared identity unifies and strengthens the nation.', ideology: 'nationalist', resources: { sway: 2, gold: 1 } },
-    b: { text: 'No — diversity is our strength and must be celebrated.', ideology: 'progressive', resources: { cred: 2, sway: 1 } } },
-  { id: 'ic_03', question: 'A scandal breaks. Do you hold a press conference or let allies spin it?',
-    a: { text: 'Hold a dramatic press conference — dominate the narrative!', ideology: 'populist', resources: { press: 3 } },
-    b: { text: 'Quietly manage it. cred the people to see through the noise.', ideology: 'progressive', resources: { cred: 2, gold: 1 } } },
-  { id: 'ic_04', question: 'Should universal basic income replace traditional welfare programs?',
-    a: { text: 'Yes — streamline the system and let markets do the rest.', ideology: 'corporatist', resources: { gold: 2, press: 1 } },
-    b: { text: 'No — targeted support serves the vulnerable better.', ideology: 'progressive', resources: { cred: 3 } } },
-  { id: 'ic_05', question: 'A rival spreads misinformation about you. Your response?',
-    a: { text: 'Launch a counter-campaign — louder, bolder, trending.', ideology: 'populist', resources: { press: 2, sway: 1 } },
-    b: { text: 'Publicly call it out with facts — integrity wins long-term.', ideology: 'progressive', resources: { cred: 2, gold: 1 } } },
-  { id: 'ic_06', question: 'Should immigration be restricted to protect national interests?',
-    a: { text: 'Yes — our people come first. Jobs, security, identity.', ideology: 'nationalist', resources: { sway: 3 } },
-    b: { text: 'No — open borders drive innovation and economic growth.', ideology: 'corporatist', resources: { gold: 2, press: 1 } } },
-  { id: 'ic_07', question: 'A major factory is polluting a river. What do you do?',
-    a: { text: 'Fine them but let them operate — jobs matter more.', ideology: 'corporatist', resources: { gold: 3 } },
-    b: { text: 'Shut it down. No compromise on the environment.', ideology: 'progressive', resources: { cred: 2, press: 1 } } },
-  { id: 'ic_08', question: 'Should the voting age be lowered to 16?',
-    a: { text: 'Absolutely — youth voices deserve to shape their future.', ideology: 'progressive', resources: { cred: 2, sway: 1 } },
-    b: { text: 'No — maturity and experience should be prerequisites.', ideology: 'nationalist', resources: { sway: 2, gold: 1 } } },
-  { id: 'ic_09', question: 'A celebrity endorses your campaign. Do you accept?',
-    a: { text: 'Yes! Reach millions — culture IS politics now.', ideology: 'populist', resources: { press: 2, sway: 1 } },
-    b: { text: 'Only if they genuinely believe in your platform.', ideology: 'progressive', resources: { cred: 2, gold: 1 } } },
-  { id: 'ic_10', question: 'Should healthcare be fully privatized for better efficiency?',
-    a: { text: 'Yes — competition drives quality and innovation.', ideology: 'corporatist', resources: { gold: 2, press: 1 } },
-    b: { text: 'Never — health is a right, not a commodity.', ideology: 'progressive', resources: { cred: 3 } } },
-  { id: 'ic_11', question: 'A rival politician makes a major gaffe. How do you respond?',
-    a: { text: 'Turn it into a meme — dominate social press for a week.', ideology: 'populist', resources: { press: 3 } },
-    b: { text: "Focus on your policies. Their mistakes aren't your platform.", ideology: 'progressive', resources: { cred: 2, sway: 1 } } },
-  { id: 'ic_12', question: 'Should the state control key industries like energy and telecom?',
-    a: { text: 'Yes — essential services must serve the people, not shareholders.', ideology: 'nationalist', resources: { sway: 2, cred: 1 } },
-    b: { text: 'No — private ownership and competition delivers better results.', ideology: 'corporatist', resources: { gold: 3 } } },
-  { id: 'ic_13', question: 'Should social press platforms be regulated by the government?',
-    a: { text: 'Yes — unchecked platforms spread misinformation and hatred.', ideology: 'nationalist', resources: { sway: 2, press: 1 } },
-    b: { text: 'No — free speech must be protected at all costs.', ideology: 'corporatist', resources: { gold: 2, cred: 1 } } },
-  { id: 'ic_14', question: 'A whistleblower exposes corruption in your party. What do you do?',
-    a: { text: 'Discredit them — the mission is bigger than one person.', ideology: 'nationalist', resources: { sway: 3 } },
-    b: { text: 'Thank them publicly — accountability builds lasting cred.', ideology: 'progressive', resources: { cred: 3 } } },
-  { id: 'ic_15', question: 'Should free education be guaranteed up to university level?',
-    a: { text: 'Yes — an educated population is the greatest national investment.', ideology: 'progressive', resources: { cred: 2, press: 1 } },
-    b: { text: 'No — competition and student loans drive excellence.', ideology: 'corporatist', resources: { gold: 2, sway: 1 } } },
-  { id: 'ic_16', question: 'Should wealthy individuals pay a higher percentage of tax?',
-    a: { text: 'No — flat tax is fair and investment drives growth.', ideology: 'corporatist', resources: { gold: 3 } },
-    b: { text: 'Yes — wealth inequality threatens social cohesion.', ideology: 'progressive', resources: { cred: 2, press: 1 } } },
-  { id: 'ic_17', question: 'Should the military budget be increased?',
-    a: { text: 'Yes — strong defence is the foundation of national security.', ideology: 'nationalist', resources: { sway: 2, gold: 1 } },
-    b: { text: 'No — invest in education and healthcare instead.', ideology: 'progressive', resources: { cred: 3 } } },
-  { id: 'ic_18', question: 'A rival goes viral for the wrong reasons. Do you comment?',
-    a: { text: 'Absolutely — pivot it into your biggest press moment.', ideology: 'populist', resources: { press: 2, sway: 1 } },
-    b: { text: 'Stay silent — let the story die on its own.', ideology: 'progressive', resources: { cred: 2, gold: 1 } } },
-  { id: 'ic_19', question: 'Should the government subsidise electric vehicles?',
-    a: { text: 'Yes — green transition needs public investment.', ideology: 'progressive', resources: { cred: 2, press: 1 } },
-    b: { text: 'No — let the market decide the pace of innovation.', ideology: 'corporatist', resources: { gold: 2, sway: 1 } } },
-  { id: 'ic_20', question: 'Should national holidays celebrate military victories?',
-    a: { text: 'Yes — pride in our history unites the nation.', ideology: 'nationalist', resources: { sway: 3 } },
-    b: { text: 'No — holidays should be inclusive and forward-looking.', ideology: 'populist', resources: { press: 2, cred: 1 } } },
+  { id: 'ic_01', question: 'Duryodhana offers you vast wealth to betray the Pandavas. Do you accept?',
+    a: { text: 'Yes — gold sustains armies and kingdoms. Pragmatism rules.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'No — loyalty and righteousness cannot be bought.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_02', question: 'Karna asks to join your army. He is mighty but born of low birth. Do you welcome him?',
+    a: { text: 'Yes — a warrior's worth is in his deeds, not his birth.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'No — order and hierarchy must be preserved for stability.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_03', question: 'The people of a conquered kingdom resist. Do you rule by fear or win their hearts?',
+    a: { text: 'Rule by force — swift and clear authority prevents rebellion.', ideology: 'danda', resources: { shakti: 3 } },
+    b: { text: 'Win their hearts — lasting loyalty is built through compassion.', ideology: 'sama', resources: { kirti: 2, satya: 1 } } },
+  { id: 'ic_04', question: 'Shakuni proposes a game of dice. Do you accept the challenge?',
+    a: { text: 'Yes — to refuse is cowardice. A king must not flinch.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } },
+    b: { text: 'No — wisdom is knowing when not to gamble.', ideology: 'dharma', resources: { satya: 3 } } },
+  { id: 'ic_05', question: 'Krishna offers you his army or himself as a counsellor. What do you choose?',
+    a: { text: 'His army — numbers and steel win wars.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'Krishna himself — divine wisdom is worth more than any army.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_06', question: 'A spy reveals the enemy's battle plans. The spy demands a high price. Do you pay?',
+    a: { text: 'Yes — information is the greatest weapon in war.', ideology: 'artha', resources: { suvarna: 3 } },
+    b: { text: 'No — build alliances of trust, not transactions.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_07', question: 'Your guru Drona demands the thumb of Ekalavya as guru dakshina. Do you support this?',
+    a: { text: 'Yes — preserving the established order protects the kingdom.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } },
+    b: { text: 'No — this is injustice. Talent must not be crushed.', ideology: 'dharma', resources: { satya: 3 } } },
+  { id: 'ic_08', question: 'Draupadi has been humiliated in the Sabha. The assembly is silent. Do you speak?',
+    a: { text: 'Speak boldly — injustice answered with silence is complicity.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'Stay silent — the laws of the game must be upheld.', ideology: 'danda', resources: { shakti: 3 } } },
+  { id: 'ic_09', question: 'Bhishma is invincible but stands against dharma. How do you face him?',
+    a: { text: 'Use Shikhandi — sometimes strategy must override honour.', ideology: 'artha', resources: { suvarna: 2, kirti: 1 } },
+    b: { text: 'Face him directly — a warrior must not hide behind others.', ideology: 'danda', resources: { shakti: 3 } } },
+  { id: 'ic_10', question: 'Yudhishthira wants to gamble the kingdom one more time. Do you support him?',
+    a: { text: 'Yes — follow your elder. His dharma is your dharma.', ideology: 'dharma', resources: { satya: 2, shakti: 1 } },
+    b: { text: 'No — this is madness. Some decisions must be refused.', ideology: 'danda', resources: { shakti: 2, satya: 1 } } },
+  { id: 'ic_11', question: 'A kingdom offers tribute but secretly arms your enemy. Do you accept the tribute?',
+    a: { text: 'Yes — take their gold and prepare for their betrayal.', ideology: 'artha', resources: { suvarna: 3 } },
+    b: { text: 'No — expose their treachery and make an example.', ideology: 'danda', resources: { shakti: 2, kirti: 1 } } },
+  { id: 'ic_12', question: 'Arjuna refuses to fight his kin on the battlefield. How do you counsel him?',
+    a: { text: 'Duty above all — the warrior's path must be walked without attachment.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'His hesitation is understandable — compassion has its own wisdom.', ideology: 'sama', resources: { kirti: 2, satya: 1 } } },
+  { id: 'ic_13', question: 'The people are starving after a long war. Do you distribute the royal treasury?',
+    a: { text: 'Yes — a king's wealth exists to protect his people.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'No — a depleted treasury invites invasion. Rebuild first.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } } },
+  { id: 'ic_14', question: 'Vidura warns you the dice game is a trap. Do you heed his counsel?',
+    a: { text: 'Yes — a wise minister's counsel is worth more than pride.', ideology: 'sama', resources: { kirti: 2, satya: 1 } },
+    b: { text: 'No — a king must not show fear before his rivals.', ideology: 'danda', resources: { shakti: 3 } } },
+  { id: 'ic_15', question: 'You can win the war by breaking an oath. Do you do it?',
+    a: { text: 'Yes — victory justifies the means. Oaths bind the weak.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'No — a king who breaks his word rules over nothing.', ideology: 'dharma', resources: { satya: 3 } } },
+  { id: 'ic_16', question: 'A bard composes songs of your glory across all kingdoms. Do you commission more?',
+    a: { text: 'Yes — renown is a weapon more powerful than steel.', ideology: 'sama', resources: { kirti: 3 } },
+    b: { text: 'No — deeds speak louder than songs. Let the work show itself.', ideology: 'dharma', resources: { satya: 2, suvarna: 1 } } },
+  { id: 'ic_17', question: 'Nakula is skilled with horses and wants to build the greatest cavalry. Do you fund it?',
+    a: { text: 'Yes — swift cavalry decides the fate of battles.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'Partially — balance the army rather than over-invest in one arm.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_18', question: 'Sahadeva's prophecy reveals the perfect day to start the war. Do you trust it?',
+    a: { text: 'Yes — knowledge of the stars is knowledge of fate.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'No — men make their own fate. Act when ready, not when stars say so.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_19', question: 'Duryodhana insults you publicly in the court. How do you respond?',
+    a: { text: 'Rise above it — a composed king commands more respect than an angry one.', ideology: 'sama', resources: { kirti: 2, satya: 1 } },
+    b: { text: 'Respond with power — silence is mistaken for weakness.', ideology: 'danda', resources: { shakti: 3 } } },
+  { id: 'ic_20', question: 'After victory, the Kauravas' kingdom is yours. Do you punish the survivors?',
+    a: { text: 'No — mercy after victory builds lasting peace.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'Yes — those who raised arms must face consequences.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_21', question: 'A rival prince offers his daughter in marriage to seal an alliance. Do you accept?',
+    a: { text: 'Yes — alliances built through family bonds are the strongest.', ideology: 'sama', resources: { kirti: 2, suvarna: 1 } },
+    b: { text: 'No — political marriages breed divided loyalties.', ideology: 'danda', resources: { shakti: 2, satya: 1 } } },
+  { id: 'ic_22', question: 'Your granary is full but a neighbouring kingdom faces famine. Do you share?',
+    a: { text: 'Yes — a kingdom that lets its neighbours starve makes enemies.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'No — our people come first. Let them solve their own crisis.', ideology: 'artha', resources: { suvarna: 3 } } },
+  { id: 'ic_23', question: 'Ashwatthama wants revenge and cannot be controlled. Do you release him?',
+    a: { text: 'Yes — his rage is a weapon. Direct it at the enemy.', ideology: 'danda', resources: { shakti: 3 } },
+    b: { text: 'No — uncontrolled wrath destroys friend and foe alike.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_24', question: 'Sanjaya's divine sight lets him report the battle in real time. Do you use this advantage?',
+    a: { text: 'Yes — information in battle is everything.', ideology: 'artha', resources: { suvarna: 2, kirti: 1 } },
+    b: { text: 'Let the battle unfold — interfering with divine gifts brings misfortune.', ideology: 'dharma', resources: { satya: 3 } } },
+  { id: 'ic_25', question: 'A merchant offers to fund your army in exchange for exclusive trade rights. Do you agree?',
+    a: { text: 'Yes — wealth from trade is better than debt from war.', ideology: 'artha', resources: { suvarna: 3 } },
+    b: { text: 'No — exclusive rights breed monopoly and resentment.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_26', question: 'Your commander wants to use a forbidden weapon that will cause mass destruction. Do you allow it?',
+    a: { text: 'No — some victories are not worth their cost.', ideology: 'dharma', resources: { satya: 3 } },
+    b: { text: 'Yes — win at all costs. The kingdom cannot afford to lose.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_27', question: 'The people want entertainment — grand festivals and tournaments. Do you fund them?',
+    a: { text: 'Yes — a happy people do not revolt.', ideology: 'sama', resources: { kirti: 3 } },
+    b: { text: 'No — spend on defence and infrastructure, not spectacle.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } } },
+  { id: 'ic_28', question: 'An enemy general offers to defect with his entire battalion. Do you trust him?',
+    a: { text: 'Yes — his knowledge of the enemy's plans is invaluable.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'No — a man who betrays once will betray again.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_29', question: 'Bhima wants to break Duryodhana's thigh in violation of the mace duel rules. Do you stop him?',
+    a: { text: 'Stop him — victory without honour is not victory.', ideology: 'dharma', resources: { satya: 3 } },
+    b: { text: 'Let him — the enemy earned no mercy. Win however you must.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_30', question: 'The elders advise patience. The young warriors want immediate battle. Whom do you heed?',
+    a: { text: 'The elders — wisdom and patience win long campaigns.', ideology: 'sama', resources: { kirti: 2, satya: 1 } },
+    b: { text: 'The young — momentum and speed catch the enemy unprepared.', ideology: 'danda', resources: { shakti: 3 } } },
+  { id: 'ic_31', question: 'Your treasury is empty. Do you tax the merchants heavily to fund the war?',
+    a: { text: 'Yes — in crisis, all must contribute to the common cause.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } },
+    b: { text: 'No — overtaxing breaks commerce and breeds resentment.', ideology: 'artha', resources: { suvarna: 2, kirti: 1 } } },
+  { id: 'ic_32', question: 'A sage curses your enemy's bloodline. Do you use this curse as a weapon?',
+    a: { text: 'Yes — even divine weapons must be used when given.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } },
+    b: { text: 'No — fighting through curses is not a warrior's path.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_33', question: 'After the war, Gandhari curses you in grief. Do you accept the curse humbly?',
+    a: { text: 'Yes — her grief is just. Accept the consequence with dignity.', ideology: 'dharma', resources: { satya: 3 } },
+    b: { text: 'Protect yourself — a king cannot afford to be weakened.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_34', question: 'A forest tribe offers fierce warriors in exchange for land rights. Do you agree?',
+    a: { text: 'Yes — warriors are needed now. Deal with the land later.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'Yes and honour it fully — alliances kept are alliances strengthened.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_35', question: 'Krishna uses illusion to save Arjuna at a critical moment. Do you use such tactics?',
+    a: { text: 'Yes — dharma adapts. Saving the righteous is always justified.', ideology: 'sama', resources: { kirti: 2, satya: 1 } },
+    b: { text: 'No — illusion in battle is deception and mars the soul.', ideology: 'dharma', resources: { satya: 3 } } },
+  { id: 'ic_36', question: 'Your spies report that the enemy plans a night attack — against the laws of war. Do you respond in kind?',
+    a: { text: 'Yes — if they abandon the rules, so shall we.', ideology: 'danda', resources: { shakti: 3 } },
+    b: { text: 'No — we fight with honour regardless of the enemy's conduct.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_37', question: 'A powerful kingdom will join you only if you give them half your conquered lands. Do you agree?',
+    a: { text: 'Yes — half a large kingdom is better than none.', ideology: 'artha', resources: { suvarna: 2, kirti: 1 } },
+    b: { text: 'No — negotiate harder. Desperation invites exploitation.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_38', question: 'A poet captures your victory in verse that will echo through ages. Do you commission it?',
+    a: { text: 'Yes — legacy is the only true immortality.', ideology: 'sama', resources: { kirti: 3 } },
+    b: { text: 'No — actions speak. Let history judge without embellishment.', ideology: 'dharma', resources: { satya: 2, suvarna: 1 } } },
+  { id: 'ic_39', question: 'Karna reveals he is your brother. Do you offer him the throne if he switches sides?',
+    a: { text: 'Yes — blood is thicker than oaths made under pressure.', ideology: 'sama', resources: { kirti: 2, satya: 1 } },
+    b: { text: 'No — he made his choice and must live with it.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_40', question: 'The Rajasuya Yagna will announce your supremacy. Do you perform it even if it provokes war?',
+    a: { text: 'Yes — supremacy must be declared or it will never be respected.', ideology: 'danda', resources: { shakti: 2, kirti: 1 } },
+    b: { text: 'No — provoking war for ceremony is poor statecraft.', ideology: 'artha', resources: { suvarna: 2, satya: 1 } } },
+  { id: 'ic_41', question: 'Bhishma's deathbed counsel will take days to receive. Do you wait?',
+    a: { text: 'Yes — the wisdom of ages cannot be rushed or replaced.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'No — the kingdom needs governance now, not more counsel.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } } },
+  { id: 'ic_42', question: 'The citizens of Hastinapura demand justice for the war's suffering. Do you grant a public hearing?',
+    a: { text: 'Yes — a king who listens builds trust that outlasts any campaign.', ideology: 'dharma', resources: { satya: 3 } },
+    b: { text: 'No — decisions must be made swiftly. Hearings weaken authority.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_43', question: 'You discover a hidden treasury left by the old dynasty. How do you use it?',
+    a: { text: 'Rebuild the kingdom — the people need roads, wells, and granaries.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'Strengthen the army first — security before prosperity.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_44', question: 'A nagarika (city dweller) movement demands more rights. Do you grant them?',
+    a: { text: 'Yes — a king governs by the will and welfare of all.', ideology: 'sama', resources: { kirti: 2, satya: 1 } },
+    b: { text: 'No — granting too much too quickly breeds disorder.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } } },
+  { id: 'ic_45', question: 'A drought threatens three kingdoms. You have enough water. Do you share?',
+    a: { text: 'Yes — shared survival builds the alliances that endure.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'Trade it — water is power. Let them negotiate.', ideology: 'artha', resources: { suvarna: 3 } } },
+  { id: 'ic_46', question: 'Your charioteer knows your weaknesses. He demands gold to stay silent. Do you pay?',
+    a: { text: 'Pay him — silence bought is cheaper than scandal.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'Refuse — a king who pays blackmail will pay forever.', ideology: 'danda', resources: { shakti: 2, satya: 1 } } },
+  { id: 'ic_47', question: 'Abhimanyu is trapped and dying in the Chakravyuha. Can you break the formation in time?',
+    a: { text: 'Break through at any cost — a warrior never abandons his own.', ideology: 'danda', resources: { shakti: 3 } },
+    b: { text: 'Regroup and form a counter-strategy — reckless charges destroy armies.', ideology: 'artha', resources: { suvarna: 2, kirti: 1 } } },
+  { id: 'ic_48', question: 'The war is won but the land is ravaged. Do you declare a period of peace and rebuilding?',
+    a: { text: 'Yes — the greatest victory is a kingdom that prospers in peace.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'Consolidate power first — peace without security is fragile.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_49', question: 'A blind king has ruled with great wisdom. Do you ask his counsel still?',
+    a: { text: 'Yes — blindness of the eyes does not blind the mind.', ideology: 'sama', resources: { kirti: 2, satya: 1 } },
+    b: { text: 'No — a ruler must be decisive, not beholden to the past.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_50', question: 'Kunti reveals that Karna is your brother after his death. How do you honour him?',
+    a: { text: 'With full royal honours — his deeds merit remembrance beyond faction.', ideology: 'dharma', resources: { satya: 3 } },
+    b: { text: 'With quiet rites — too public an honour might unsettle your allies.', ideology: 'artha', resources: { suvarna: 2, kirti: 1 } } },
+  { id: 'ic_51', question: 'The forest rishis warn that clearing land for a new city will anger the gods. Do you proceed?',
+    a: { text: 'Proceed — cities build civilisations. The gods will understand.', ideology: 'artha', resources: { suvarna: 2, shakti: 1 } },
+    b: { text: 'Consult and compromise — anger the gods and the harvest fails.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } } },
+  { id: 'ic_52', question: 'Nakula proposes a trade route through hostile territory. The rewards are great. Do you support it?',
+    a: { text: 'Yes — wealth requires risk. Send guards and proceed.', ideology: 'artha', resources: { suvarna: 3 } },
+    b: { text: 'No — expose a trade caravan to hostility and you invite war.', ideology: 'danda', resources: { shakti: 2, satya: 1 } } },
+  { id: 'ic_53', question: 'Yudhishthira wants to renounce the throne and go to the forest. Do you support him?',
+    a: { text: 'Yes — he has earned his peace. Let him walk the final dharma.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'No — a king who abandons his people abandons his duty.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_54', question: 'A rival has spread falsehoods about you across all seven kingdoms. How do you respond?',
+    a: { text: 'Counter with a grand proclamation of truth — let your deeds drown the lies.', ideology: 'sama', resources: { kirti: 3 } },
+    b: { text: 'Find the source and silence it — lies left standing grow roots.', ideology: 'danda', resources: { shakti: 2, suvarna: 1 } } },
+  { id: 'ic_55', question: 'The great war is over. A young soldier weeps for the fallen enemies. Do you comfort him?',
+    a: { text: 'Yes — a king who mourns all lives is a king worth following.', ideology: 'dharma', resources: { satya: 2, kirti: 1 } },
+    b: { text: 'No — sentiment on the battlefield weakens resolve.', ideology: 'danda', resources: { shakti: 3 } } },
 ];
 
-// ─── Voter Cards ──────────────────────────────────────────────────────────────
+// ─── Ally Cards (Warriors & Factions) ────────────────────────────────────────
 
 const VOTER_CARDS = [
-  { id: 'vc_01', voterCount: 1, cost: { gold: 1 },                    label: 'Local Businessman' },
-  { id: 'vc_02', voterCount: 1, cost: { cred: 1 },                    label: 'Community Leader' },
-  { id: 'vc_03', voterCount: 1, cost: { sway: 1 },                    label: 'Street Organizer' },
-  { id: 'vc_04', voterCount: 1, cost: { press: 1 },                    label: 'Influencer' },
-  { id: 'vc_05', voterCount: 2, cost: { gold: 1, sway: 1 },          label: 'Trade Union' },
-  { id: 'vc_06', voterCount: 2, cost: { cred: 1, press: 1 },          label: 'Civil Society Group' },
-  { id: 'vc_07', voterCount: 2, cost: { gold: 2 },                    label: 'Corporate Donors' },
-  { id: 'vc_08', voterCount: 2, cost: { sway: 2 },                    label: 'Street Network' },
-  { id: 'vc_09', voterCount: 2, cost: { cred: 2 },                    label: 'Grassroots Movement' },
-  { id: 'vc_10', voterCount: 2, cost: { press: 2 },                    label: 'press Campaign' },
-  { id: 'vc_11', voterCount: 3, cost: { gold: 2, cred: 1 },          label: 'Business Alliance' },
-  { id: 'vc_12', voterCount: 3, cost: { sway: 2, press: 1 },          label: 'Rally Crowd' },
-  { id: 'vc_13', voterCount: 3, cost: { cred: 2, gold: 1 },          label: 'Voter Drive' },
-  { id: 'vc_14', voterCount: 3, cost: { press: 2, sway: 1 },          label: 'Viral Campaign' },
-  { id: 'vc_15', voterCount: 3, cost: { gold: 1, sway: 1, cred: 1 },label: 'Coalition Bloc' },
-  { id: 'vc_16', voterCount: 1, cost: { gold: 2 },                    label: 'Paid Canvasser' },
-  { id: 'vc_17', voterCount: 1, cost: { sway: 2 },                    label: 'Ward Boss' },
-  { id: 'vc_18', voterCount: 1, cost: { press: 2 },                    label: 'Social press Star' },
-  { id: 'vc_19', voterCount: 1, cost: { cred: 2 },                    label: 'Local Hero' },
-  { id: 'vc_20', voterCount: 2, cost: { gold: 1, press: 1 },          label: 'PR Firm' },
-  { id: 'vc_21', voterCount: 2, cost: { sway: 1, cred: 1 },          label: 'Neighbourhood Watch' },
-  { id: 'vc_22', voterCount: 2, cost: { gold: 1, cred: 1 },          label: 'Faith Community' },
-  { id: 'vc_23', voterCount: 2, cost: { sway: 1, press: 1 },          label: 'Youth Brigade' },
-  { id: 'vc_24', voterCount: 3, cost: { gold: 2, press: 1 },          label: 'Ad Blitz' },
-  { id: 'vc_25', voterCount: 3, cost: { sway: 1, cred: 1, press: 1 },label: 'People\'s Front' },
-  { id: 'vc_26', voterCount: 4, cost: { gold: 2, sway: 2 },          label: 'Party Machine' },
-  { id: 'vc_27', voterCount: 4, cost: { cred: 2, press: 2 },          label: 'Mass Movement' },
-  { id: 'vc_28', voterCount: 4, cost: { gold: 2, cred: 1, sway: 1 },label: 'Grand Alliance' },
-  { id: 'vc_29', voterCount: 1, cost: { gold: 1, cred: 1 },          label: 'Town Elder' },
-  { id: 'vc_30', voterCount: 2, cost: { gold: 3 },                    label: 'Lobbying Firm' },
+  { id: 'vc_01', voterCount: 1, cost: { suvarna: 1 },                         label: 'Village Merchant' },
+  { id: 'vc_02', voterCount: 1, cost: { satya: 1 },                           label: 'Gram Pradhan' },
+  { id: 'vc_03', voterCount: 1, cost: { shakti: 1 },                          label: 'Senapati's Aide' },
+  { id: 'vc_04', voterCount: 1, cost: { kirti: 1 },                           label: 'Court Poet' },
+  { id: 'vc_05', voterCount: 2, cost: { suvarna: 1, shakti: 1 },              label: 'Vaishya Guild' },
+  { id: 'vc_06', voterCount: 2, cost: { satya: 1, kirti: 1 },                 label: 'Sabha Council' },
+  { id: 'vc_07', voterCount: 2, cost: { suvarna: 2 },                         label: 'Royal Treasury' },
+  { id: 'vc_08', voterCount: 2, cost: { shakti: 2 },                          label: 'Kshatriya Band' },
+  { id: 'vc_09', voterCount: 2, cost: { satya: 2 },                           label: 'Jana Sangha' },
+  { id: 'vc_10', voterCount: 2, cost: { kirti: 2 },                           label: 'Bard's Tale' },
+  { id: 'vc_11', voterCount: 3, cost: { suvarna: 2, satya: 1 },               label: 'Merchant Alliance' },
+  { id: 'vc_12', voterCount: 3, cost: { shakti: 2, kirti: 1 },                label: 'War Drums' },
+  { id: 'vc_13', voterCount: 3, cost: { satya: 2, suvarna: 1 },               label: 'Pilgrimage March' },
+  { id: 'vc_14', voterCount: 3, cost: { kirti: 2, shakti: 1 },                label: 'Royal Decree' },
+  { id: 'vc_15', voterCount: 3, cost: { suvarna: 1, shakti: 1, satya: 1 },   label: 'Samiti Bloc' },
+  { id: 'vc_16', voterCount: 1, cost: { suvarna: 2 },                         label: 'Hired Scout' },
+  { id: 'vc_17', voterCount: 1, cost: { shakti: 2 },                          label: 'Gram Mukhiya' },
+  { id: 'vc_18', voterCount: 1, cost: { kirti: 2 },                           label: 'Court Dancer' },
+  { id: 'vc_19', voterCount: 1, cost: { satya: 2 },                           label: 'Village Hero' },
+  { id: 'vc_20', voterCount: 2, cost: { suvarna: 1, kirti: 1 },               label: 'Royal Herald' },
+  { id: 'vc_21', voterCount: 2, cost: { shakti: 1, satya: 1 },                label: 'Border Guards' },
+  { id: 'vc_22', voterCount: 2, cost: { suvarna: 1, satya: 1 },               label: 'Ashram Followers' },
+  { id: 'vc_23', voterCount: 2, cost: { shakti: 1, kirti: 1 },                label: 'Young Warriors' },
+  { id: 'vc_24', voterCount: 3, cost: { suvarna: 2, kirti: 1 },               label: 'Proclamation Blitz' },
+  { id: 'vc_25', voterCount: 3, cost: { shakti: 1, satya: 1, kirti: 1 },     label: 'Praja Morcha' },
+  { id: 'vc_26', voterCount: 4, cost: { suvarna: 2, shakti: 2 },              label: 'Rajya Yantra' },
+  { id: 'vc_27', voterCount: 4, cost: { satya: 2, kirti: 2 },                 label: 'Lok Andolan' },
+  { id: 'vc_28', voterCount: 4, cost: { suvarna: 2, satya: 1, shakti: 1 },   label: 'Maha Sandhi' },
+  { id: 'vc_29', voterCount: 1, cost: { suvarna: 1, satya: 1 },               label: 'Village Pandit' },
+  { id: 'vc_30', voterCount: 2, cost: { suvarna: 3 },                         label: 'Raj Darbari' },
 ];
 
-// ─── Conspiracy Cards (bought blind — effect revealed on use) ─────────────────
+// ─── Maya Cards (Shakuni's Arsenal — bought blind) ───────────────────────────
 
 const CONSPIRACY_CARDS = [
-  { id: 'cc_01', name: 'Smear Campaign',      desc: 'Remove up to 2 opponent voters from any unlocked zone.',   effect: 'remove_opponent_voter', cost: 4 },
-  { id: 'cc_02', name: 'Bloc Mobilization',   desc: 'Place 3 of your voters in any one zone for free.',         effect: 'place_free_voters',     cost: 5 },
-  { id: 'cc_03', name: 'press Blackout',       desc: 'Opponent loses 3 press.',                                  effect: 'steal_press',           cost: 4 },
-  { id: 'cc_04', name: 'Financial Scandal',    desc: 'Opponent loses 3 gold.',                                  effect: 'steal_gold',           cost: 4 },
-  { id: 'cc_05', name: 'Grassroots Drive',     desc: 'Gain 3 cred impresstely.',                                effect: 'gain_cred',            cost: 4 },
-  { id: 'cc_06', name: 'Populist Rally',       desc: 'Gain 3 sway impresstely.',                                effect: 'gain_sway',            cost: 4 },
-  { id: 'cc_07', name: 'Dark Money',           desc: 'Gain 4 gold impresstely.',                                effect: 'gain_gold',            cost: 4 },
-  { id: 'cc_08', name: 'Swing Vote',           desc: 'Move any 1 non-majority voter to an adjacent zone.',       effect: 'swing_vote',            cost: 5 },
-  { id: 'cc_09', name: 'Opposition Research',  desc: 'Steal 2 resources from opponent\'s richest pool.',         effect: 'steal_resources',       cost: 5 },
+  { id: 'cc_01', name: 'Shakuni's Dice',    desc: 'Remove up to 2 enemy warriors from any unlocked kingdom.', effect: 'remove_opponent_voter', cost: 4 },
+  { id: 'cc_02', name: 'Karna's Army',      desc: 'Deploy 3 of your warriors into any one kingdom for free.', effect: 'place_free_voters',     cost: 5 },
+  { id: 'cc_03', name: 'Drona's Silence',   desc: 'Opponent loses 3 Kirti.',                                  effect: 'steal_kirti',           cost: 4 },
+  { id: 'cc_04', name: 'Treasury Raid',      desc: 'Opponent loses 3 Suvarna.',                               effect: 'steal_suvarna',         cost: 4 },
+  { id: 'cc_05', name: 'Krishna's Counsel', desc: 'Gain 3 Satya immediately.',                               effect: 'gain_satya',            cost: 4 },
+  { id: 'cc_06', name: 'Bhima's Roar',      desc: 'Gain 3 Shakti immediately.',                              effect: 'gain_shakti',           cost: 4 },
+  { id: 'cc_07', name: 'Hidden Wealth',      desc: 'Gain 4 Suvarna immediately.',                             effect: 'gain_suvarna',          cost: 4 },
+  { id: 'cc_08', name: 'Vidura's Wisdom',   desc: 'Move any 1 non-majority warrior to a bordering kingdom.', effect: 'swing_vote',            cost: 5 },
+  { id: 'cc_09', name: 'Spy Network',        desc: 'Steal 2 resources from opponent's richest reserve.',     effect: 'steal_resources',       cost: 5 },
 ];
 
-// ─── Headline Cards (triggered by volatile zone entry) ────────────────────────
+// ─── Proclamation Cards (triggered by volatile kingdom entry) ─────────────────
 
 const HEADLINE_CARDS = [
-  // Negative (8) — 80%
-  { id: 'hl_01', title: 'Protest Erupts!',         desc: 'Lose 3 sway — the streets turn against you.',           effect: 'lose_sway',   value: 3,  good: false },
-  { id: 'hl_02', title: 'Funding Scandal',          desc: 'Lose 3 gold — donors pull out.',                        effect: 'lose_gold',   value: 3,  good: false },
-  { id: 'hl_03', title: 'press Frenzy',             desc: 'Lose 3 press — narrative spins out of control.',         effect: 'lose_press',   value: 3,  good: false },
-  { id: 'hl_04', title: 'cred Crisis',             desc: 'Lose 3 cred — voters question your integrity.',         effect: 'lose_cred',   value: 3,  good: false },
-  { id: 'hl_05', title: 'Voter Suppressed',         desc: 'The voter who just entered is impresstely removed.',      effect: 'remove_voter', value: 1,  good: false },
-  { id: 'hl_06', title: 'Scandal Breaks',           desc: 'Lose 2 gold and 2 sway — the press has the story.',   effect: 'lose_gold_sway', value: 2, good: false },
-  { id: 'hl_07', title: 'Voter Backlash',           desc: 'Lose 2 cred and 1 press — locals push back hard.',     effect: 'lose_cred_press', value: 2, good: false },
-  { id: 'hl_08', title: 'Exposed!',                 desc: 'Lose 4 resources from your largest pool.',              effect: 'lose_largest', value: 4,  good: false },
-  // Positive (2) — 20%
-  { id: 'hl_09', title: 'Sympathy Vote!',           desc: 'Place 1 free voter in this zone — locals back you.',    effect: 'place_voter',  value: 1,  good: true  },
-  { id: 'hl_10', title: 'Underdog Moment!',         desc: 'Gain 2 cred — the public roots for you.',              effect: 'gain_cred',   value: 2,  good: true  },
+  { id: 'hl_01', title: 'Soldiers Desert!',       desc: 'Lose 3 Shakti — your warriors lose faith.',            effect: 'lose_shakti',       value: 3, good: false },
+  { id: 'hl_02', title: 'Treasury Plundered',     desc: 'Lose 3 Suvarna — the royal vault is raided.',          effect: 'lose_suvarna',      value: 3, good: false },
+  { id: 'hl_03', title: 'Bards Curse You',        desc: 'Lose 3 Kirti — your name is blackened in song.',       effect: 'lose_kirti',        value: 3, good: false },
+  { id: 'hl_04', title: 'People's Wrath',        desc: 'Lose 3 Satya — the people doubt your dharma.',         effect: 'lose_satya',        value: 3, good: false },
+  { id: 'hl_05', title: 'Warrior Expelled',       desc: 'The warrior who just entered is immediately removed.',  effect: 'remove_voter',      value: 1, good: false },
+  { id: 'hl_06', title: 'Dual Scandal',           desc: 'Lose 2 Suvarna and 2 Shakti — war and wealth fail.',   effect: 'lose_funds_clout',  value: 2, good: false },
+  { id: 'hl_07', title: 'Dharma Questioned',      desc: 'Lose 2 Satya and 1 Kirti — your virtue is doubted.',   effect: 'lose_trust_media',  value: 2, good: false },
+  { id: 'hl_08', title: 'Exposed by Sanjaya',     desc: 'Lose 4 resources from your largest reserve.',          effect: 'lose_largest',      value: 4, good: false },
+  { id: 'hl_09', title: 'Divine Favour!',         desc: 'Place 1 free warrior here — the gods smile on you.',   effect: 'place_voter',       value: 1, good: true  },
+  { id: 'hl_10', title: 'People's Champion!',    desc: 'Gain 2 Satya — the people rally to your cause.',       effect: 'gain_satya',        value: 2, good: true  },
 ];
 
 // ─── Ideology Powers ──────────────────────────────────────────────────────────
 
 const IDEOLOGY_POWERS = {
-  corporatist: [
-    { at: 2, name: 'Passive Income',  desc: '+1 Fund each turn for every 2 corporatist cards.' },
-    { at: 3, name: 'Prospecting',     desc: 'Once per turn: trade 1 resource of any type for 2 of another.' },
-    { at: 5, name: 'Breaking Ground', desc: 'Once per turn: evict (remove) 3 voters from any zone.' },
+  artha: [
+    { at: 2, name: 'Passive Income',    desc: '+1 Suvarna each turn for every 2 Artha cards.' },
+    { at: 3, name: 'Vaishya's Trade',  desc: 'Once per turn: exchange 1 resource for 2 of another.' },
+    { at: 5, name: 'Bhima's Might',    desc: 'Once per turn: remove 3 warriors from any unlocked kingdom.' },
   ],
-  nationalist: [
-    { at: 2, name: 'Passive Income',  desc: '+1 sway each turn for every 2 nationalist cards.' },
-    { at: 3, name: 'Donations',       desc: 'Once per turn: snatch (steal) 2 resources from opponent.' },
-    { at: 5, name: 'Payback',         desc: 'Once per turn: discard 2 opponent voters from any zone.' },
+  danda: [
+    { at: 2, name: 'Passive Income',       desc: '+1 Shakti each turn for every 2 Danda cards.' },
+    { at: 3, name: 'Shakuni's Gambit',    desc: 'Once per turn: seize 2 resources from opponent.' },
+    { at: 5, name: 'Ashwatthama's Wrath', desc: 'Once per turn: discard 2 enemy warriors from any unlocked kingdom.' },
   ],
-  populist: [
-    { at: 2, name: 'Passive Income',  desc: '+1 press each turn for every 2 populist cards.' },
-    { at: 3, name: 'Going Viral',     desc: '+1 extra voter placed per voter card used this turn.' },
-    { at: 5, name: 'Election Fever',  desc: '+1 extra gerrymander move allowed per zone this turn.' },
+  sama: [
+    { at: 2, name: 'Passive Income',    desc: '+1 Kirti each turn for every 2 Sama cards.' },
+    { at: 3, name: 'Krishna's Leela',  desc: '+1 extra warrior deployed per ally card this turn.' },
+    { at: 5, name: 'Conch of Victory',  desc: '+1 extra Yuddha Neeti move per kingdom this turn.' },
   ],
-  progressive: [
-    { at: 2, name: 'Passive Income',  desc: '+1 cred each turn for every 2 progressive cards.' },
-    { at: 3, name: 'Helping Hands',   desc: 'Get 2 discounts (reduce cost by 1) on voter cards this turn.' },
-    { at: 5, name: 'Tough Love',      desc: 'Once per turn: convert 2 opponent voters to your side.' },
+  dharma: [
+    { at: 2, name: 'Passive Income',        desc: '+1 Satya each turn for every 2 Dharma cards.' },
+    { at: 3, name: 'Draupadi's Grace',     desc: 'Activate: 2 discounts (reduce cost by 1) on ally cards this turn.' },
+    { at: 5, name: 'Yudhishthira's Dharma',desc: 'Once per turn: convert 2 enemy warriors to your cause where you lead.' },
   ],
 };
 
-const RESOURCE_TYPES = ['gold', 'sway', 'press', 'cred'];
-const RESOURCE_FOR_IDEOLOGY = { corporatist: 'gold', nationalist: 'sway', populist: 'press', progressive: 'cred' };
+const RESOURCE_TYPES = ['suvarna', 'shakti', 'kirti', 'satya'];
+const RESOURCE_FOR_IDEOLOGY = { artha: 'suvarna', danda: 'shakti', sama: 'kirti', dharma: 'satya' };
 const RESOURCE_CAP = 12;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -242,8 +345,8 @@ function calcPassiveIncome(player) {
     }
   }
   // Level 5 progressive: extra +1 cred
-  if (player.ideologyCards.progressive >= 5) {
-    income.cred = (income.cred || 0) + 1;
+  if (player.ideologyCards.dharma >= 5) {
+    income.satya = (income.satya || 0) + 1;
   }
   return income;
 }
@@ -300,7 +403,7 @@ function getVoterCost(player, baseCost) {
 // Apply conspiracy cost reduction from ideology powers
 function getConspiracyCost(player, baseCost) {
   // Level 3 populist: conspiracy cards cost 1 less
-  if (player.ideologyCards.populist >= 3) return Math.max(1, baseCost - 1);
+  if (player.ideologyCards.sama >= 3) return Math.max(1, baseCost - 1);
   return baseCost;
 }
 
@@ -318,8 +421,8 @@ function createInitialState(players) {
     slot:         p.slot,
     userId:       p.userId,
     username:     p.username,
-    gold: 2, sway: 2, press: 2, cred: 2,
-    ideologyCards: { corporatist: 0, nationalist: 0, populist: 0, progressive: 0 },
+    suvarna: 2, shakti: 2, kirti: 2, satya: 2,
+    ideologyCards: { artha: 0, danda: 0, sama: 0, dharma: 0 },
     conspiracies:  [],
     usedPowerThisTurn: false,  // tracks once-per-turn powers
   });
@@ -385,7 +488,7 @@ function answerCard(state, slot, choice) {
   clampResources(player);
 
   // Check Level 5 populist: place 1 free voter after answering
-  const freePegZone = player.ideologyCards.populist >= 5
+  const freePegZone = player.ideologyCards.sama >= 5
     ? s.zones.findIndex(z => z.pegs.length < z.capacity && checkMajority(z) === null)
     : -1;
 
@@ -442,13 +545,13 @@ function influenceVoterCard(state, slot, voterCardId, zoneIndex) {
   }
 
   // Level 3 populist: Going Viral — +1 extra voter per card
-  const extraVoters = player.ideologyCards.populist >= 3 ? 1 : 0;
+  const extraVoters = player.ideologyCards.sama >= 3 ? 1 : 0;
   const totalVoters = card.voterCount + extraVoters;
   const actualSpacesLeft = zone.capacity - zone.pegs.length;
   const votersToPlace = Math.min(totalVoters, actualSpacesLeft);
 
   // Level 5 populist: Election Fever — +1 gerrymander/zone
-  if (player.ideologyCards.populist >= 5) {
+  if (player.ideologyCards.sama >= 5) {
     s.electionFeverActive = true;
   }
 
@@ -495,7 +598,7 @@ function helpingHands(state, slot) {
   if (state.currentSlot !== slot) return err('Not your turn');
   const s = JSON.parse(JSON.stringify(state));
   const player = s.players.find(p => p.slot === slot);
-  if (player.ideologyCards.progressive < 3) return err('Need 3 progressive cards for Helping Hands');
+  if (player.ideologyCards.dharma < 3) return err('Need 3 Dharma cards for Draupadi's Grace');
   if (player.usedPowerThisTurn)          return err('Already used a power this turn');
   player.helpingHandsActive = true;  // enables discount in getVoterCost
   player.helpingHandsUsed = 0;       // tracks how many of the 2 discounts used
@@ -517,21 +620,21 @@ function resolveHeadline(state, slot) {
   const player   = s.players.find(p => p.slot === headline.triggerSlot);
 
   switch (headline.effect) {
-    case 'lose_sway':  player.sway  = Math.max(0, player.sway  - headline.value); break;
-    case 'lose_gold':  player.gold  = Math.max(0, player.gold  - headline.value); break;
-    case 'lose_press':  player.press  = Math.max(0, player.press  - headline.value); break;
-    case 'lose_cred':  player.cred  = Math.max(0, player.cred  - headline.value); break;
-    case 'gain_sway':  player.sway  += headline.value; clampResources(player); break;
-    case 'gain_gold':  player.gold  += headline.value; clampResources(player); break;
-    case 'gain_press':  player.press  += headline.value; clampResources(player); break;
-    case 'gain_cred':  player.cred  += headline.value; clampResources(player); break;
-    case 'lose_gold_sway':
-      player.gold = Math.max(0, player.gold - headline.value);
-      player.sway = Math.max(0, player.sway - headline.value);
+    case 'lose_shakti':  player.shakti  = Math.max(0, player.shakti  - headline.value); break;
+    case 'lose_suvarna': player.suvarna = Math.max(0, player.suvarna - headline.value); break;
+    case 'lose_kirti':   player.kirti   = Math.max(0, player.kirti   - headline.value); break;
+    case 'lose_satya':   player.satya   = Math.max(0, player.satya   - headline.value); break;
+    case 'gain_shakti':  player.shakti  += headline.value; clampResources(player); break;
+    case 'gain_suvarna': player.suvarna += headline.value; clampResources(player); break;
+    case 'gain_kirti':   player.kirti   += headline.value; clampResources(player); break;
+    case 'gain_satya':   player.satya   += headline.value; clampResources(player); break;
+    case 'lose_funds_clout':
+      player.suvarna = Math.max(0, player.suvarna - headline.value);
+      player.shakti  = Math.max(0, player.shakti  - headline.value);
       break;
-    case 'lose_cred_press':
-      player.cred = Math.max(0, player.cred - headline.value);
-      player.press = Math.max(0, player.press - 1);
+    case 'lose_trust_media':
+      player.satya  = Math.max(0, player.satya  - headline.value);
+      player.kirti  = Math.max(0, player.kirti  - 1);
       break;
     case 'lose_largest': {
       const richest = [...RESOURCE_TYPES].sort((a, b) => player[b] - player[a])[0];
@@ -545,12 +648,12 @@ function resolveHeadline(state, slot) {
       }
       break;
     }
-    case 'remove_voter_and_sway': {
+    case 'remove_voter_and_shakti': {
       const zone = s.zones.find(z => z.name === headline.zoneName);
       if (zone && zone.pegs.includes(headline.triggerSlot)) {
         zone.pegs.splice(zone.pegs.lastIndexOf(headline.triggerSlot), 1);
       }
-      player.sway = Math.max(0, player.sway - 1);
+      player.shakti = Math.max(0, player.shakti - 1);
       break;
     }
     case 'place_voter': {
@@ -605,7 +708,7 @@ function gerrymander(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, righ
   }
   // Level 3 nationalist: opponent cannot remove your majority voters via gerrymander
   if (pegOwnerSlot !== slot && checkMajority(fromZ) === pegOwnerSlot &&
-      s.players.find(p => p.slot === pegOwnerSlot)?.ideologyCards?.nationalist >= 3) {
+      s.players.find(p => p.slot === pegOwnerSlot)?.ideologyCards?.danda >= 3) {
     return err('Opponent\'s majority voters are protected by Stronghold');
   }
 
@@ -705,7 +808,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
       if (!zone) return err('No valid target zone');
       if (checkMajority(zone) !== null) return err('Zone is locked');
       // Level 3 nationalist protects majority voters
-      const isProtected = opp?.ideologyCards?.nationalist >= 3 && checkMajority(zone) === oppSlot;
+      const isProtected = opp?.ideologyCards?.danda >= 3 && checkMajority(zone) === oppSlot;
       if (isProtected) return err("Opponent's majority voters are protected by Stronghold");
       let removed = 0;
       while (removed < 2 && zone.pegs.includes(oppSlot)) {
@@ -725,11 +828,11 @@ function useConspiracy(state, slot, instanceId, params = {}) {
         text: `${player.username} used Bloc Mobilization — placed ${canPlace} voters in ${zone.name}` });
       break;
     }
-    case 'steal_press':    opp.press  = Math.max(0, opp.press  - 3); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} launched press Blackout on ${opp.username}` }); break;
-    case 'steal_gold':    opp.gold  = Math.max(0, opp.gold  - 3); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} triggered Financial Scandal on ${opp.username}` }); break;
-    case 'gain_cred':     player.cred += 3;  clampResources(player); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} ran Grassroots Drive (+3 cred)` }); break;
-    case 'gain_sway':     player.sway += 3;  clampResources(player); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} held Populist Rally (+3 sway)` }); break;
-    case 'gain_gold':     player.gold += 4;  clampResources(player); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} secured Dark Money (+4 gold)` }); break;
+    case 'steal_kirti':   opp.kirti   = Math.max(0, opp.kirti   - 3); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} invoked Drona's Silence on ${opp.username}` }); break;
+    case 'steal_suvarna': opp.suvarna = Math.max(0, opp.suvarna - 3); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} raided ${opp.username}'s treasury` }); break;
+    case 'gain_satya':    player.satya  += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} invoked Krishna's Counsel (+3 Satya)` }); break;
+    case 'gain_shakti':   player.shakti += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} invoked Bhima's Roar (+3 Shakti)` }); break;
+    case 'gain_suvarna':  player.suvarna += 4; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: 'conspiracy', text: `${player.username} revealed Hidden Wealth (+4 Suvarna)` }); break;
     case 'swing_vote': {
       const { fromZone, toZone, pegOwner } = params;
       if (fromZone === undefined || toZone === undefined || pegOwner === undefined) return err('Needs fromZone, toZone, pegOwner');
@@ -788,7 +891,7 @@ function convertResource(state, slot, fromResource, toResource) {
   const s      = JSON.parse(JSON.stringify(state));
   const player = s.players.find(p => p.slot === slot);
 
-  if (player.ideologyCards.progressive < 3) return err('Need 3 progressive cards for Coalition power');
+  if (player.ideologyCards.dharma < 3) return err('Need 3 Dharma cards for Draupadi's Grace');
   if (player.usedPowerThisTurn)          return err('Already used a power this turn');
   if (!RESOURCE_TYPES.includes(fromResource) || !RESOURCE_TYPES.includes(toResource)) return err('Invalid resource type');
   if (player[fromResource] < 1)          return err(`Not enough ${fromResource}`);
@@ -812,7 +915,7 @@ function prospecting(state, slot, fromResource, toResource) {
   if (state.currentSlot !== slot) return err('Not your turn');
   const s = JSON.parse(JSON.stringify(state));
   const player = s.players.find(p => p.slot === slot);
-  if (player.ideologyCards.corporatist < 3)  return err('Need 3 corporatist cards for Prospecting');
+  if (player.ideologyCards.artha < 3)  return err('Need 3 Artha cards for Vaishya's Trade');
   if (player.usedPowerThisTurn)             return err('Already used a power this turn');
   if (!RESOURCE_TYPES.includes(fromResource) || !RESOURCE_TYPES.includes(toResource)) return err('Invalid resource');
   if (player[fromResource] < 1)             return err(`Not enough ${fromResource}`);
@@ -832,7 +935,7 @@ function donations(state, slot) {
   const s = JSON.parse(JSON.stringify(state));
   const player = s.players.find(p => p.slot === slot);
   const opp    = s.players.find(p => p.slot !== slot);
-  if (player.ideologyCards.nationalist < 3) return err('Need 3 nationalist cards for Donations');
+  if (player.ideologyCards.danda < 3) return err('Need 3 Danda cards for Shakuni's Gambit');
   if (player.usedPowerThisTurn)         return err('Already used a power this turn');
   let stolen = 0;
   const sorted = [...RESOURCE_TYPES].sort((a, b) => opp[b] - opp[a]);
@@ -855,7 +958,7 @@ function payback(state, slot, zoneIndex) {
   const s = JSON.parse(JSON.stringify(state));
   const player  = s.players.find(p => p.slot === slot);
   const oppSlot = slot === 1 ? 2 : 1;
-  if (player.ideologyCards.nationalist < 5) return err('Need 5 nationalist cards for Payback');
+  if (player.ideologyCards.danda < 5) return err('Need 5 Danda cards for Ashwatthama's Wrath');
   if (player.usedPowerThisTurn)         return err('Already used a power this turn');
   const zone = s.zones[zoneIndex];
   if (!zone) return err('Invalid zone');
@@ -876,7 +979,7 @@ function breakingGround(state, slot, zoneIndex) {
   if (state.currentSlot !== slot) return err('Not your turn');
   const s = JSON.parse(JSON.stringify(state));
   const player = s.players.find(p => p.slot === slot);
-  if (player.ideologyCards.corporatist < 5) return err('Need 5 corporatist cards for Breaking Ground');
+  if (player.ideologyCards.artha < 5) return err('Need 5 Artha cards for Bhima's Might');
   if (player.usedPowerThisTurn)            return err('Already used a power this turn');
   const zone = s.zones[zoneIndex];
   if (!zone) return err('Invalid zone');
@@ -895,7 +998,7 @@ function toughLove(state, slot, zoneIndex) {
   const s = JSON.parse(JSON.stringify(state));
   const player  = s.players.find(p => p.slot === slot);
   const oppSlot = slot === 1 ? 2 : 1;
-  if (player.ideologyCards.progressive < 5) return err('Need 5 progressive cards for Tough Love');
+  if (player.ideologyCards.dharma < 5) return err('Need 5 Dharma cards for Yudhishthira's Dharma');
   if (player.usedPowerThisTurn)          return err('Already used a power this turn');
   const zone = s.zones[zoneIndex];
   if (!zone) return err('Invalid zone');
