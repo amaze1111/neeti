@@ -727,13 +727,14 @@ function gerrymander(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, righ
   s.log.unshift({ turn: s.turn, slot, type: "gerrymander",
     text: `${player.username} gerrymandered ${movedName}'s voter: ${fromZ.name} → ${toZ.name} (using ${rZ.name} rights)` });
 
-  // Headline triggers when opponent's voter is moved INTO a volatile zone
-  if (toZ.volatile && pegOwnerSlot !== slot && s.headlineDeck.length > 0) {
+  // Headline triggers when this move fills the last slot of the destination zone
+  if (toZ.pegs.length === toZ.capacity && !s.pendingHeadline) {
+    if (s.headlineDeck.length === 0) s.headlineDeck = shuffle(HEADLINE_CARDS.map(c => c.id));
     const headlineId = s.headlineDeck.shift();
     const headline = HEADLINE_CARDS.find(h => h.id === headlineId);
     s.pendingHeadline = { ...headline, triggerSlot: pegOwnerSlot, zoneName: toZ.name };
     s.log.unshift({ turn: s.turn, slot, type: "headline",
-      text: `📰 HEADLINE triggered: "${headline.title}" — ${movedName}'s voter entered volatile ${toZ.name}` });
+      text: `📰 HEADLINE triggered: "${headline.title}" — last slot filled in ${toZ.name}` });
   }
 
   return ok(_checkGameEnd(s));
@@ -846,13 +847,14 @@ function useConspiracy(state, slot, instanceId, params = {}) {
       if (pi === -1) return err("No such voter in that zone");
       fz.pegs.splice(pi, 1); tz.pegs.push(pegOwner);
       s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} used Swing Vote` });
-      // Headline if opponent's voter swung into volatile zone
-      if (tz.volatile && pegOwner !== slot && s.headlineDeck.length > 0) {
+      // Headline if this move fills the last slot
+      if (tz.pegs.length === tz.capacity && !s.pendingHeadline) {
+        if (s.headlineDeck.length === 0) s.headlineDeck = shuffle(HEADLINE_CARDS.map(c => c.id));
         const headlineId = s.headlineDeck.shift();
         const headline = HEADLINE_CARDS.find(h => h.id === headlineId);
         s.pendingHeadline = { ...headline, triggerSlot: pegOwner, zoneName: tz.name };
         s.log.unshift({ turn: s.turn, slot, type: "headline",
-          text: `📰 HEADLINE triggered: "${headline.title}" — voter swung into volatile ${tz.name}` });
+          text: `📰 HEADLINE triggered: "${headline.title}" — last slot filled in ${tz.name}` });
       }
       break;
     }
