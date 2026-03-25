@@ -6,6 +6,7 @@ const bot       = require('../services/botEngine');
 
 const rooms          = new Map(); // roomCode → Set<WebSocket>
 const activeSessions = new Map(); // roomCode → gameState
+const matchmakingQueue = new Map(); // userId → { ws, user } — players waiting for a match
 
 function send(ws, event, payload = {}) {
   if (ws.readyState === WebSocket.OPEN) {
@@ -57,6 +58,8 @@ module.exports = function attachWebSocket(server) {
         case 'room:ready':            await handleReady(ws, user, payload); break;
         case 'ping':                  break; // keepalive — no response needed
         case 'room:leave':            handleRoomLeave(ws); break;
+        case 'queue:join':            await handleQueueJoin(ws, user); break;
+        case 'queue:cancel':          handleQueueCancel(ws, user); break;
         case 'game:answer_card':      await handleMutate(ws, payload.roomCode, s => engine.answerCard(s, ws._slot, payload.choice)); break;
         case 'game:influence_voter':  await handleMutate(ws, payload.roomCode, s => engine.influenceVoterCard(s, ws._slot, payload.voterCardId, payload.zoneIndex)); break;
         case 'game:gerrymander':      await handleMutate(ws, payload.roomCode, s => engine.gerrymander(s, ws._slot, payload.fromZoneIndex, payload.toZoneIndex, payload.pegOwnerSlot, payload.rightsZoneIndex)); break;
@@ -80,6 +83,8 @@ module.exports = function attachWebSocket(server) {
         const clients = rooms.get(code);
         if (clients) { clients.delete(ws); if (clients.size === 0) rooms.delete(code); }
       }
+      // Remove from matchmaking queue if disconnected while waiting
+      if (ws._user) matchmakingQueue.delete(ws._user.userId);
     });
   });
 
@@ -95,6 +100,78 @@ module.exports = function attachWebSocket(server) {
 };
 
 // ─── Handlers ─────────────────────────────────────────────────────────────────
+
+// ─── Matchmaking Queue ────────────────────────────────────────────────────────
+
+function generateCode() {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
+async function handleQueueJoin(ws, user) {
+  // Already in queue — ignore
+  if (matchmakingQueue.has(user.userId)) {
+    return send(ws, 'queue:waiting', { position: matchmakingQueue.size });
+  }
+
+  // Check if another player is waiting
+  const waiting = [...matchmakingQueue.values()].find(e => e.ws.readyState === WebSocket.OPEN);
+
+  if (waiting) {
+    // Match found — create a room for both players
+    matchmakingQueue.delete(waiting.user.userId);
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      let code, exists = true;
+      while (exists) {
+        code = generateCode();
+        const { rows } = await client.query("SELECT id FROM rooms WHERE code = $1 AND status != 'finished'", [code]);
+        exists = rows.length > 0;
+      }
+      const { rows: [room] } = await client.query(
+        `INSERT INTO rooms (code, host_id) VALUES ($1, $2) RETURNING *`,
+        [code, waiting.user.userId]
+      );
+      await client.query(
+        `INSERT INTO room_players (room_id, user_id, slot, ideology, is_ready) VALUES ($1, $2, 1, 'none', false)`,
+        [room.id, waiting.user.userId]
+      );
+      await client.query(
+        `INSERT INTO room_players (room_id, user_id, slot, ideology, is_ready) VALUES ($1, $2, 2, 'none', false)`,
+        [room.id, user.userId]
+      );
+      await client.query('COMMIT');
+
+      console.log(`🎯 Matched ${waiting.user.username} vs ${user.username} in room ${code}`);
+
+      // Notify both players
+      send(waiting.ws, 'queue:matched', { roomCode: code });
+      send(ws,         'queue:matched', { roomCode: code });
+    } catch (e) {
+      await client.query('ROLLBACK');
+      console.error('Matchmaking error:', e);
+      send(ws, 'game:error', { message: 'Matchmaking failed. Please try again.' });
+      // Put the waiting player back
+      matchmakingQueue.set(waiting.user.userId, waiting);
+    } finally {
+      client.release();
+    }
+  } else {
+    // No one waiting — add to queue
+    matchmakingQueue.set(user.userId, { ws, user });
+    send(ws, 'queue:waiting', { position: matchmakingQueue.size });
+    console.log(`⏳ ${user.username} joined matchmaking queue (${matchmakingQueue.size} waiting)`);
+  }
+}
+
+function handleQueueCancel(ws, user) {
+  matchmakingQueue.delete(user.userId);
+  send(ws, 'queue:cancelled', {});
+  console.log(`❌ ${user.username} left matchmaking queue`);
+}
 
 // ─── Leave Room (client navigated away — keep room alive) ─────────────────────
 
