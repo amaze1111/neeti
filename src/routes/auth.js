@@ -77,6 +77,11 @@ async function insertUser({ username, email, hash }) {
   const insertColumns = ['id', 'username', 'email', passwordColumn];
   const values = [userId, username, email, hash];
 
+  if (columns.includes('display_name')) {
+    insertColumns.push('display_name');
+    values.push(username);
+  }
+
   if (columns.includes('avatar_seed')) {
     insertColumns.push('avatar_seed');
     values.push(username);
