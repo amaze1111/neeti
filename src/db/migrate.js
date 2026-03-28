@@ -2,6 +2,9 @@ require('dotenv').config();
 const pool = require('./pool');
 
 const schema = `
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- ─── Users ──────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS users (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -71,17 +74,22 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_seed VARCHAR(64);
 ALTER TABLE users ADD COLUMN IF NOT EXISTS wins INTEGER DEFAULT 0;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS losses INTEGER DEFAULT 0;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE users ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
 ALTER TABLE rooms ADD COLUMN IF NOT EXISTS is_bot BOOLEAN DEFAULT FALSE;
 ALTER TABLE rooms ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 ALTER TABLE rooms ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ;
 ALTER TABLE rooms ADD COLUMN IF NOT EXISTS finished_at TIMESTAMPTZ;
+ALTER TABLE rooms ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
 ALTER TABLE room_players ADD COLUMN IF NOT EXISTS ideology VARCHAR(20) NOT NULL DEFAULT 'capitalist';
 ALTER TABLE room_players ADD COLUMN IF NOT EXISTS is_ready BOOLEAN DEFAULT FALSE;
 ALTER TABLE room_players ADD COLUMN IF NOT EXISTS joined_at TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE room_players ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
 ALTER TABLE games ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE games ALTER COLUMN id SET DEFAULT gen_random_uuid();
+ALTER TABLE game_events ALTER COLUMN id SET DEFAULT gen_random_uuid();
 `;
 
 async function migrate() {

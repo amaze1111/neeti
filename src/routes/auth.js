@@ -1,6 +1,7 @@
 const express  = require('express');
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const pool     = require('../db/pool');
 
 const router = express.Router();
@@ -24,22 +25,23 @@ function sanitizeUser(row) {
 }
 
 async function insertUserWithFallback({ username, email, hash }) {
+  const userId = uuidv4();
   try {
     const { rows } = await pool.query(
-      `INSERT INTO users (username, email, password, avatar_seed)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO users (id, username, email, password, avatar_seed)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [username, email, hash, username]
+      [userId, username, email, hash, username]
     );
     return rows[0];
   } catch (e) {
     // Older production schemas may not yet have avatar_seed.
     if (e.code !== '42703') throw e;
     const { rows } = await pool.query(
-      `INSERT INTO users (username, email, password)
-       VALUES ($1, $2, $3)
+      `INSERT INTO users (id, username, email, password)
+       VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [username, email, hash]
+      [userId, username, email, hash]
     );
     return rows[0];
   }
