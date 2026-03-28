@@ -16,7 +16,12 @@ function signToken(user) {
 
 function sanitizeUser(row) {
   if (!row) return row;
-  const { password: _password, ...safeUser } = row;
+  const safeUser = { ...row };
+  delete safeUser.password;
+  delete safeUser.password_hash;
+  delete safeUser.hashed_password;
+  delete safeUser.passhash;
+  delete safeUser.passwd;
   return {
     ...safeUser,
     wins: Number(safeUser.wins ?? 0),
@@ -24,7 +29,7 @@ function sanitizeUser(row) {
   };
 }
 
-function withDebug(req, payload, error) {
+function withDebug(req, payload, error, extra = {}) {
   if (req.get('x-debug-auth') !== '1') return payload;
   return {
     ...payload,
@@ -33,31 +38,67 @@ function withDebug(req, payload, error) {
       detail: error?.detail ?? null,
       constraint: error?.constraint ?? null,
       message: error?.message ?? null,
+      ...extra,
     },
   };
 }
 
-async function insertUserWithFallback({ username, email, hash }) {
+async function getUserTableColumns() {
+  const { rows } = await pool.query(`
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'users'
+  `);
+  return rows.map((row) => row.column_name);
+}
+
+function pickFirstColumn(columns, candidates) {
+  return candidates.find((candidate) => columns.includes(candidate)) ?? null;
+}
+
+async function insertUser({ username, email, hash }) {
+  const columns = await getUserTableColumns();
   const userId = uuidv4();
-  try {
-    const { rows } = await pool.query(
-      `INSERT INTO users (id, username, email, password, avatar_seed)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING *`,
-      [userId, username, email, hash, username]
-    );
-    return rows[0];
-  } catch (e) {
-    // Older production schemas may not yet have avatar_seed.
-    if (e.code !== '42703') throw e;
-    const { rows } = await pool.query(
-      `INSERT INTO users (id, username, email, password)
-       VALUES ($1, $2, $3, $4)
-       RETURNING *`,
-      [userId, username, email, hash]
-    );
-    return rows[0];
+  const passwordColumn = pickFirstColumn(columns, [
+    'password',
+    'password_hash',
+    'hashed_password',
+    'passhash',
+    'passwd',
+  ]);
+
+  if (!passwordColumn) {
+    const error = new Error('No password column found on users table');
+    error.code = 'NO_PASSWORD_COLUMN';
+    error.columns = columns;
+    throw error;
   }
+
+  const insertColumns = ['id', 'username', 'email', passwordColumn];
+  const values = [userId, username, email, hash];
+
+  if (columns.includes('avatar_seed')) {
+    insertColumns.push('avatar_seed');
+    values.push(username);
+  }
+
+  const placeholders = insertColumns.map((_, index) => `$${index + 1}`).join(', ');
+  const query = `INSERT INTO users (${insertColumns.join(', ')}) VALUES (${placeholders}) RETURNING *`;
+  const { rows } = await pool.query(query, values);
+  return rows[0];
+}
+
+async function findUserByEmail(email) {
+  const columns = await getUserTableColumns();
+  const passwordColumn = pickFirstColumn(columns, [
+    'password',
+    'password_hash',
+    'hashed_password',
+    'passhash',
+    'passwd',
+  ]);
+  const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  return { user: rows[0], columns, passwordColumn };
 }
 
 // POST /auth/register
@@ -76,7 +117,7 @@ router.post('/register', async (req, res) => {
 
   try {
     const hash = await bcrypt.hash(password, 12);
-    const user = await insertUserWithFallback({
+    const user = await insertUser({
       username: username.trim(),
       email: email.toLowerCase().trim(),
       hash,
@@ -88,7 +129,7 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ error: `That ${field} is already taken` });
     }
     console.error(e);
-    res.status(500).json(withDebug(req, { error: 'Registration failed' }, e));
+    res.status(500).json(withDebug(req, { error: 'Registration failed' }, e, { columns: e.columns ?? null }));
   }
 });
 
@@ -100,19 +141,16 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    const { rows } = await pool.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email.toLowerCase().trim()]
-    );
-    const user = rows[0];
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    const { user, columns, passwordColumn } = await findUserByEmail(email.toLowerCase().trim());
+    const storedHash = passwordColumn ? user?.[passwordColumn] : null;
+    if (!user || !storedHash || !(await bcrypt.compare(password, storedHash))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     res.json({ user: sanitizeUser(user), token: signToken(user) });
   } catch (e) {
     console.error(e);
-    res.status(500).json(withDebug(req, { error: 'Login failed' }, e));
+    res.status(500).json(withDebug(req, { error: 'Login failed' }, e, { columns: e.columns ?? null }));
   }
 });
 
