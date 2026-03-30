@@ -196,36 +196,36 @@ const IDEOLOGY_CARDS = [
 // ─── Ally Cards (Warriors & Factions) ────────────────────────────────────────
 
 const Soldier_CARDS = [
-  { id: "vc_01", SoldierCount: 1, cost: { swarna: 1 },                         label: "Village Merchant" },
-  { id: "vc_02", SoldierCount: 1, cost: { satya: 1 },                           label: "Gram Pradhan" },
-  { id: "vc_03", SoldierCount: 1, cost: { shakti: 1 },                          label: "senapati's Aide" },
-  { id: "vc_04", SoldierCount: 1, cost: { kirti: 1 },                           label: "Court Poet" },
-  { id: "vc_05", SoldierCount: 2, cost: { swarna: 1, shakti: 1 },              label: "Vaishya Guild" },
-  { id: "vc_06", SoldierCount: 2, cost: { satya: 1, kirti: 1 },                 label: "sabha Council" },
-  { id: "vc_07", SoldierCount: 2, cost: { swarna: 2 },                         label: "Royal Treasury" },
-  { id: "vc_08", SoldierCount: 2, cost: { shakti: 2 },                          label: "Kshatriya Band" },
-  { id: "vc_09", SoldierCount: 2, cost: { satya: 2 },                           label: "Jana Sangha" },
-  { id: "vc_10", SoldierCount: 2, cost: { kirti: 2 },                           label: "Bard's Tale" },
-  { id: "vc_11", SoldierCount: 3, cost: { swarna: 2, satya: 1 },               label: "Merchant Alliance" },
-  { id: "vc_12", SoldierCount: 3, cost: { shakti: 2, kirti: 1 },                label: "War Drums" },
-  { id: "vc_13", SoldierCount: 3, cost: { satya: 2, swarna: 1 },               label: "Pilgrimage March" },
-  { id: "vc_14", SoldierCount: 3, cost: { kirti: 2, shakti: 1 },                label: "Royal Decree" },
-  { id: "vc_15", SoldierCount: 3, cost: { swarna: 1, shakti: 1, satya: 1 },   label: "samiti Bloc" },
-  { id: "vc_16", SoldierCount: 1, cost: { swarna: 2 },                         label: "Hired Scout" },
-  { id: "vc_17", SoldierCount: 1, cost: { shakti: 2 },                          label: "Gram Mukhiya" },
-  { id: "vc_18", SoldierCount: 1, cost: { kirti: 2 },                           label: "Court Dancer" },
-  { id: "vc_19", SoldierCount: 1, cost: { satya: 2 },                           label: "Village Hero" },
-  { id: "vc_20", SoldierCount: 2, cost: { swarna: 1, kirti: 1 },               label: "Royal Herald" },
-  { id: "vc_21", SoldierCount: 2, cost: { shakti: 1, satya: 1 },                label: "Border Guards" },
-  { id: "vc_22", SoldierCount: 2, cost: { swarna: 1, satya: 1 },               label: "Ashram Followers" },
-  { id: "vc_23", SoldierCount: 2, cost: { shakti: 1, kirti: 1 },                label: "Young Warriors" },
-  { id: "vc_24", SoldierCount: 3, cost: { swarna: 2, kirti: 1 },               label: "Proclamation Blitz" },
-  { id: "vc_25", SoldierCount: 3, cost: { shakti: 1, satya: 1, kirti: 1 },     label: "Praja Morcha" },
-  { id: "vc_26", SoldierCount: 4, cost: { swarna: 2, shakti: 2 },              label: "Rajya Yantra" },
-  { id: "vc_27", SoldierCount: 4, cost: { satya: 2, kirti: 2 },                 label: "Lok Andolan" },
-  { id: "vc_28", SoldierCount: 4, cost: { swarna: 2, satya: 1, shakti: 1 },   label: "Maha Sandhi" },
-  { id: "vc_29", SoldierCount: 1, cost: { swarna: 1, satya: 1 },               label: "Village Pandit" },
-  { id: "vc_30", SoldierCount: 2, cost: { swarna: 3 },                         label: "Raj Darbari" },
+  { id: "vc_01", soldierCount: 1, cost: { swarna: 1 },                         label: "Village Merchant" },
+  { id: "vc_02", soldierCount: 1, cost: { satya: 1 },                           label: "Gram Pradhan" },
+  { id: "vc_03", soldierCount: 1, cost: { shakti: 1 },                          label: "senapati's Aide" },
+  { id: "vc_04", soldierCount: 1, cost: { kirti: 1 },                           label: "Court Poet" },
+  { id: "vc_05", soldierCount: 2, cost: { swarna: 1, shakti: 1 },              label: "Vaishya Guild" },
+  { id: "vc_06", soldierCount: 2, cost: { satya: 1, kirti: 1 },                 label: "sabha Council" },
+  { id: "vc_07", soldierCount: 2, cost: { swarna: 2 },                         label: "Royal Treasury" },
+  { id: "vc_08", soldierCount: 2, cost: { shakti: 2 },                          label: "Kshatriya Band" },
+  { id: "vc_09", soldierCount: 2, cost: { satya: 2 },                           label: "Jana Sangha" },
+  { id: "vc_10", soldierCount: 2, cost: { kirti: 2 },                           label: "Bard's Tale" },
+  { id: "vc_11", soldierCount: 3, cost: { swarna: 2, satya: 1 },               label: "Merchant Alliance" },
+  { id: "vc_12", soldierCount: 3, cost: { shakti: 2, kirti: 1 },                label: "War Drums" },
+  { id: "vc_13", soldierCount: 3, cost: { satya: 2, swarna: 1 },               label: "Pilgrimage March" },
+  { id: "vc_14", soldierCount: 3, cost: { kirti: 2, shakti: 1 },                label: "Royal Decree" },
+  { id: "vc_15", soldierCount: 3, cost: { swarna: 1, shakti: 1, satya: 1 },   label: "samiti Bloc" },
+  { id: "vc_16", soldierCount: 1, cost: { swarna: 2 },                         label: "Hired Scout" },
+  { id: "vc_17", soldierCount: 1, cost: { shakti: 2 },                          label: "Gram Mukhiya" },
+  { id: "vc_18", soldierCount: 1, cost: { kirti: 2 },                           label: "Court Dancer" },
+  { id: "vc_19", soldierCount: 1, cost: { satya: 2 },                           label: "Village Hero" },
+  { id: "vc_20", soldierCount: 2, cost: { swarna: 1, kirti: 1 },               label: "Royal Herald" },
+  { id: "vc_21", soldierCount: 2, cost: { shakti: 1, satya: 1 },                label: "Border Guards" },
+  { id: "vc_22", soldierCount: 2, cost: { swarna: 1, satya: 1 },               label: "Ashram Followers" },
+  { id: "vc_23", soldierCount: 2, cost: { shakti: 1, kirti: 1 },                label: "Young Warriors" },
+  { id: "vc_24", soldierCount: 3, cost: { swarna: 2, kirti: 1 },               label: "Proclamation Blitz" },
+  { id: "vc_25", soldierCount: 3, cost: { shakti: 1, satya: 1, kirti: 1 },     label: "Praja Morcha" },
+  { id: "vc_26", soldierCount: 4, cost: { swarna: 2, shakti: 2 },              label: "Rajya Yantra" },
+  { id: "vc_27", soldierCount: 4, cost: { satya: 2, kirti: 2 },                 label: "Lok Andolan" },
+  { id: "vc_28", soldierCount: 4, cost: { swarna: 2, satya: 1, shakti: 1 },   label: "Maha Sandhi" },
+  { id: "vc_29", soldierCount: 1, cost: { swarna: 1, satya: 1 },               label: "Village Pandit" },
+  { id: "vc_30", soldierCount: 2, cost: { swarna: 3 },                         label: "Raj Darbari" },
 ];
 
 // ─── Maya Cards (Shakuni's Arsenal — bought blind) ───────────────────────────
@@ -529,7 +529,7 @@ function influenceSoldierCard(state, slot, SoldierCardId, zoneIndex) {
   // Majority does NOT lock a zone — players can keep placing Soldiers (affects gerrymander)
 
   const spacesLeft = zone.capacity - zone.pegs.length;
-  if (spacesLeft < card.SoldierCount) return err(`Need ${card.SoldierCount} spaces, only ${spacesLeft} left`);
+  if (spacesLeft < card.soldierCount) return err(`Need ${card.soldierCount} spaces, only ${spacesLeft} left`);
 
   // Apply power discounts
   const cost = getSoldierCost(player, card.cost);
@@ -546,7 +546,7 @@ function influenceSoldierCard(state, slot, SoldierCardId, zoneIndex) {
 
   // Level 3 populist: Going Viral — +1 extra Soldier per card
   const extraSoldiers = player.ideologyCards.sama >= 3 ? 1 : 0;
-  const totalSoldiers = card.SoldierCount + extraSoldiers;
+  const totalSoldiers = card.soldierCount + extraSoldiers;
   const actualSpacesLeft = zone.capacity - zone.pegs.length;
   const SoldiersToPlace = Math.min(totalSoldiers, actualSpacesLeft);
 
