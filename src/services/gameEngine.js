@@ -195,7 +195,7 @@ const IDEOLOGY_CARDS = [
 
 // ─── Ally Cards (Warriors & Factions) ────────────────────────────────────────
 
-const Soldier_CARDS = [
+const SOLDIER_CARDS = [
   { id: "vc_01", soldierCount: 1, cost: { swarna: 1 },                         label: "Village Merchant" },
   { id: "vc_02", soldierCount: 1, cost: { satya: 1 },                           label: "Gram Pradhan" },
   { id: "vc_03", soldierCount: 1, cost: { shakti: 1 },                          label: "senapati's Aide" },
@@ -231,8 +231,8 @@ const Soldier_CARDS = [
 // ─── Maya Cards (Shakuni's Arsenal — bought blind) ───────────────────────────
 
 const CONSPIRACY_CARDS = [
-  { id: "cc_01", name: "shakuni's Dice",    desc: "Remove up to 2 enemy warriors from any unlocked kingdom.", effect: "remove_opponent_Soldier", cost: 4 },
-  { id: "cc_02", name: "Karna's Army",      desc: "Deploy 3 of your warriors into any one kingdom for free.", effect: "place_free_Soldiers",     cost: 5 },
+  { id: "cc_01", name: "shakuni's Dice",    desc: "Remove up to 2 enemy warriors from any unlocked kingdom.", effect: "remove_opponent_soldier", cost: 4 },
+  { id: "cc_02", name: "Karna's Army",      desc: "Deploy 3 of your warriors into any one kingdom for free.", effect: "place_free_soldiers",     cost: 5 },
   { id: "cc_03", name: "Drona's Silence",   desc: "Opponent loses 3 Kirti.",                                  effect: "steal_kirti",           cost: 4 },
   { id: "cc_04", name: "Treasury Raid",      desc: "Opponent loses 3 swarna.",                               effect: "steal_swarna",         cost: 4 },
   { id: "cc_05", name: "Krishna's Counsel", desc: "Gain 3 Satya immediately.",                               effect: "gain_satya",            cost: 4 },
@@ -249,11 +249,11 @@ const HEADLINE_CARDS = [
   { id: "hl_02", title: "Treasury Plundered",     desc: "Lose 3 swarna — the royal vault is raided.",          effect: "lose_swarna",      value: 3, good: false },
   { id: "hl_03", title: "Bards Curse You",        desc: "Lose 3 Kirti — your name is blackened in song.",       effect: "lose_kirti",        value: 3, good: false },
   { id: "hl_04", title: "People's Wrath",        desc: "Lose 3 Satya — the people doubt your dharma.",         effect: "lose_satya",        value: 3, good: false },
-  { id: "hl_05", title: "Warrior Expelled",       desc: "The warrior who just entered is immediately removed.",  effect: "remove_Soldier",      value: 1, good: false },
+  { id: "hl_05", title: "Warrior Expelled",       desc: "The warrior who just entered is immediately removed.",  effect: "remove_soldier",      value: 1, good: false },
   { id: "hl_06", title: "Dual Scandal",           desc: "Lose 2 swarna and 2 Shakti — war and wealth fail.",   effect: "lose_funds_clout",  value: 2, good: false },
   { id: "hl_07", title: "Dharma Questioned",      desc: "Lose 2 Satya and 1 Kirti — your virtue is doubted.",   effect: "lose_trust_media",  value: 2, good: false },
   { id: "hl_08", title: "Exposed by Sanjaya",     desc: "Lose 4 resources from your largest reserve.",          effect: "lose_largest",      value: 4, good: false },
-  { id: "hl_09", title: "Divine Favour!",         desc: "Place 1 free warrior here — the gods smile on you.",   effect: "place_Soldier",       value: 1, good: true  },
+  { id: "hl_09", title: "Divine Favour!",         desc: "Place 1 free warrior here — the gods smile on you.",   effect: "place_soldier",       value: 1, good: true  },
   { id: "hl_10", title: "People's Champion!",    desc: "Gain 2 Satya — the people rally to your cause.",       effect: "gain_satya",        value: 2, good: true  },
 ];
 
@@ -427,7 +427,7 @@ function createInitialState(players) {
     usedPowers: {},  // tracks once-per-turn powers per key e.g. { donations: true }
   });
 
-  const SoldierDeck    = shuffle([...Soldier_CARDS]);
+  const soldierDeck    = shuffle([...SOLDIER_CARDS]);
   const headlineDeck = shuffle(HEADLINE_CARDS.map(c => c.id));
 
   return {
@@ -437,8 +437,8 @@ function createInitialState(players) {
     turn:          1,
     phase:         "ideology",
     currentCard:   null,
-    SoldierCards:    SoldierDeck.slice(0, 4),
-    SoldierDeck:     SoldierDeck.slice(4).map(c => c.id),
+    soldierCards:    soldierDeck.slice(0, 4),
+    soldierDeck:     soldierDeck.slice(4).map(c => c.id),
     cardDeck:      shuffle(IDEOLOGY_CARDS.map(c => c.id)),
     conspiracyDeck: shuffle(CONSPIRACY_CARDS.map(c => c.id)),
     headlineDeck,
@@ -502,31 +502,31 @@ function answerCard(state, slot, choice) {
   if (freePegZone >= 0) {
     s.zones[freePegZone].pegs.push(slot);
     s.log.unshift({ turn: s.turn, slot, type: "power",
-      text: `${player.username} placed 1 free Soldier (Cult Following) in ${s.zones[freePegZone].name}` });
+      text: `${player.username} placed 1 free soldier (Cult Following) in ${s.zones[freePegZone].name}` });
   }
 
   s.currentCard = null;
   s.phase = "action";
   player.usedPowers = {};
-  s.SoldierCards = _refreshSoldierCards(s);
+  s.soldierCards = _refreshSoldierCards(s);
 
   return ok(s);
 }
 
 // ─── Influence Soldier Card ─────────────────────────────────────────────────────
 
-function influenceSoldierCard(state, slot, SoldierCardId, zoneIndex) {
+function influenceSoldierCard(state, slot, soldierCardId, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
 
   const s      = JSON.parse(JSON.stringify(state));
   const player = s.players.find(p => p.slot === slot);
   const zone   = s.zones[zoneIndex];
-  const card   = s.SoldierCards.find(c => c.id === SoldierCardId);
+  const card   = s.soldierCards.find(c => c.id === soldierCardId);
 
   if (!zone)  return err("Invalid zone");
   if (!card)  return err("Soldier card not available");
-  // Majority does NOT lock a zone — players can keep placing Soldiers (affects gerrymander)
+  // Majority does NOT lock a zone — players can keep placing soldiers (affects gerrymander)
 
   const spacesLeft = zone.capacity - zone.pegs.length;
   if (spacesLeft < card.soldierCount) return err(`Need ${card.soldierCount} spaces, only ${spacesLeft} left`);
@@ -544,23 +544,23 @@ function influenceSoldierCard(state, slot, SoldierCardId, zoneIndex) {
     if (player.helpingHandsUsed >= 2) player.helpingHandsActive = false;
   }
 
-  // Level 3 populist: Going Viral — +1 extra Soldier per card
+  // Level 3 populist: Going Viral — +1 extra soldier per card
   const extraSoldiers = player.ideologyCards.sama >= 3 ? 1 : 0;
   const totalSoldiers = card.soldierCount + extraSoldiers;
   const actualSpacesLeft = zone.capacity - zone.pegs.length;
-  const SoldiersToPlace = Math.min(totalSoldiers, actualSpacesLeft);
+  const soldiersToPlace = Math.min(totalSoldiers, actualSpacesLeft);
 
   // Level 5 populist: Election Fever — +1 gerrymander/zone
   if (player.ideologyCards.sama >= 5) {
     s.electionFeverActive = true;
   }
 
-  // Place Soldiers — last slot in zone is volatile, triggers headline against the placer
+  // Place soldiers — last slot in zone is volatile, triggers headline against the placer
   const volatileSlotIndex = zone.capacity - 1; // last slot is volatile
-  for (let i = 0; i < SoldiersToPlace; i++) {
+  for (let i = 0; i < soldiersToPlace; i++) {
     const filledSlotIndex = zone.pegs.length; // index before pushing
     zone.pegs.push(slot);
-    // If this Soldier filled the volatile slot (last slot), trigger headline
+    // If this soldier filled the volatile slot (last slot), trigger headline
     if (filledSlotIndex === volatileSlotIndex && !s.pendingHeadline) {
       // Reshuffle deck if exhausted
       if (s.headlineDeck.length === 0) {
@@ -574,25 +574,25 @@ function influenceSoldierCard(state, slot, SoldierCardId, zoneIndex) {
     }
   }
 
-  s.log.unshift({ turn: s.turn, slot, type: "influence_Soldier",
-    text: `${player.username} placed ${SoldiersToPlace} Soldier${SoldiersToPlace > 1 ? "s" : ""} (${card.label}) in ${zone.name}` });
+  s.log.unshift({ turn: s.turn, slot, type: "influence_soldier",
+    text: `${player.username} placed ${soldiersToPlace} soldier${soldiersToPlace > 1 ? "s" : ""} (${card.label}) in ${zone.name}` });
 
-  // Replace used Soldier card
-  s.SoldierCards = s.SoldierCards.filter(c => c.id !== SoldierCardId);
+  // Replace used soldier card
+  s.soldierCards = s.soldierCards.filter(c => c.id !== soldierCardId);
   // Reshuffle if deck is empty
-  if (s.SoldierDeck.length === 0) {
-    const currentIds = new Set(s.SoldierCards.map(c => c.id));
-    s.SoldierDeck = shuffle(Soldier_CARDS.filter(c => !currentIds.has(c.id)).map(c => c.id));
+  if (s.soldierDeck.length === 0) {
+    const currentIds = new Set(s.soldierCards.map(c => c.id));
+    s.soldierDeck = shuffle(SOLDIER_CARDS.filter(c => !currentIds.has(c.id)).map(c => c.id));
     s.log.unshift({ turn: s.turn, slot, type: "info", text: "🔄 Soldier card deck reshuffled." });
   }
-  const newId = s.SoldierDeck.shift();
-  const newCard = Soldier_CARDS.find(c => c.id === newId);
-  if (newCard) s.SoldierCards.push(newCard);
+  const newId = s.soldierDeck.shift();
+  const newCard = SOLDIER_CARDS.find(c => c.id === newId);
+  if (newCard) s.soldierCards.push(newCard);
 
   return ok(_checkGameEnd(s));
 }
 
-// ─── progressive L3: Helping Hands — 2 discount tokens on Soldier cards ───────────
+// ─── progressive L3: Helping Hands — 2 discount tokens on soldier cards ───────────
 function helpingHands(state, slot) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -604,7 +604,7 @@ function helpingHands(state, slot) {
   player.helpingHandsUsed = 0;       // tracks how many of the 2 discounts used
   player.usedPowers['helping_hands'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Helping Hands — 2 Soldier card discounts active` });
+    text: `${player.username} used Helping Hands — 2 soldier card discounts active` });
   return ok(s);
 }
 
@@ -641,14 +641,14 @@ function resolveHeadline(state, slot) {
       player[richest] = Math.max(0, player[richest] - headline.value);
       break;
     }
-    case "remove_Soldier": {
+    case "remove_soldier": {
       const zone = s.zones.find(z => z.name === headline.zoneName);
       if (zone && zone.pegs.includes(headline.triggerSlot)) {
         zone.pegs.splice(zone.pegs.lastIndexOf(headline.triggerSlot), 1);
       }
       break;
     }
-    case "remove_Soldier_and_shakti": {
+    case "remove_soldier_and_shakti": {
       const zone = s.zones.find(z => z.name === headline.zoneName);
       if (zone && zone.pegs.includes(headline.triggerSlot)) {
         zone.pegs.splice(zone.pegs.lastIndexOf(headline.triggerSlot), 1);
@@ -656,7 +656,7 @@ function resolveHeadline(state, slot) {
       player.shakti = Math.max(0, player.shakti - 1);
       break;
     }
-    case "place_Soldier": {
+    case "place_soldier": {
       const zone = s.zones.find(z => z.name === headline.zoneName);
       if (zone && zone.pegs.length < zone.capacity) {
         zone.pegs.push(headline.triggerSlot);
@@ -704,12 +704,12 @@ function gerrymander(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, righ
   // Cannot move majority-forming pegs
   const myPegsInFrom = fromZ.pegs.filter(p => p === pegOwnerSlot).length;
   if (checkMajority(fromZ) === pegOwnerSlot && myPegsInFrom <= fromZ.majority) {
-    return err("Cannot gerrymander majority-forming Soldiers");
+    return err("Cannot gerrymander majority-forming soldiers");
   }
-  // Level 3 nationalist: opponent cannot remove your majority Soldiers via gerrymander
+  // Level 3 nationalist: opponent cannot remove your majority soldiers via gerrymander
   if (pegOwnerSlot !== slot && checkMajority(fromZ) === pegOwnerSlot &&
       s.players.find(p => p.slot === pegOwnerSlot)?.ideologyCards?.danda >= 3) {
-    return err("Opponent\'s majority Soldiers are protected by Stronghold");
+    return err("Opponent\'s majority soldiers are protected by Stronghold");
   }
 
   // Track used rights by the RIGHTS zone index (not fromZone)
@@ -717,7 +717,7 @@ function gerrymander(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, righ
   if (s.gerrymanderUsed[rIdx]) return err(`Already used gerrymander rights of ${rZ.name} this turn`);
 
   const pegIdx = fromZ.pegs.lastIndexOf(pegOwnerSlot);
-  if (pegIdx === -1) return err("No such Soldier in that zone");
+  if (pegIdx === -1) return err("No such soldier in that zone");
 
   fromZ.pegs.splice(pegIdx, 1);
   toZ.pegs.push(pegOwnerSlot);
@@ -725,7 +725,7 @@ function gerrymander(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, righ
 
   const movedName = s.players.find(p => p.slot === pegOwnerSlot)?.username || `P${pegOwnerSlot}`;
   s.log.unshift({ turn: s.turn, slot, type: "gerrymander",
-    text: `${player.username} gerrymandered ${movedName}'s Soldier: ${fromZ.name} → ${toZ.name} (using ${rZ.name} rights)` });
+    text: `${player.username} gerrymandered ${movedName}'s soldier: ${fromZ.name} → ${toZ.name} (using ${rZ.name} rights)` });
 
   // Headline triggers when this move fills the last slot of the destination zone
   if (toZ.pegs.length === toZ.capacity && !s.pendingHeadline) {
@@ -803,30 +803,30 @@ function useConspiracy(state, slot, instanceId, params = {}) {
   const card = player.conspiracies[cardIdx];
 
   switch (card.effect) {
-    case "remove_opponent_Soldier": {
+    case "remove_opponent_soldier": {
       const zoneIndex = params.zoneIndex ?? s.zones.findIndex(z => z.pegs.includes(oppSlot) && checkMajority(z) === null);
       const zone = s.zones[zoneIndex];
       if (!zone) return err("No valid target zone");
       if (checkMajority(zone) !== null) return err("Zone is locked");
-      // Level 3 nationalist protects majority Soldiers
+      // Level 3 nationalist protects majority soldiers
       const isProtected = opp?.ideologyCards?.danda >= 3 && checkMajority(zone) === oppSlot;
-      if (isProtected) return err("Opponent's majority Soldiers are protected by Stronghold");
+      if (isProtected) return err("Opponent's majority soldiers are protected by Stronghold");
       let removed = 0;
       while (removed < 2 && zone.pegs.includes(oppSlot)) {
         zone.pegs.splice(zone.pegs.lastIndexOf(oppSlot), 1); removed++;
       }
       s.log.unshift({ turn: s.turn, slot, type: "conspiracy",
-        text: `${player.username} ran Smear Campaign — removed ${removed} of ${opp.username}'s Soldiers from ${zone.name}` });
+        text: `${player.username} ran Smear Campaign — removed ${removed} of ${opp.username}'s soldiers from ${zone.name}` });
       break;
     }
-    case "place_free_Soldiers": {
+    case "place_free_soldiers": {
       const zoneIdx = params.zoneIndex ?? s.zones.findIndex(z => z.pegs.length + 3 <= z.capacity && checkMajority(z) === null);
       const zone = s.zones[zoneIdx];
       if (!zone || checkMajority(zone) !== null) return err("No valid zone");
       const canPlace = Math.min(3, zone.capacity - zone.pegs.length);
       for (let i = 0; i < canPlace; i++) zone.pegs.push(slot);
       s.log.unshift({ turn: s.turn, slot, type: "conspiracy",
-        text: `${player.username} used Bloc Mobilization — placed ${canPlace} Soldiers in ${zone.name}` });
+        text: `${player.username} used Bloc Mobilization — placed ${canPlace} soldiers in ${zone.name}` });
       break;
     }
     case "steal_kirti":   opp.kirti   = Math.max(0, opp.kirti   - 3); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Drona's Silence on ${opp.username}` }); break;
@@ -840,11 +840,11 @@ function useConspiracy(state, slot, instanceId, params = {}) {
       const fz = s.zones[fromZone], tz = s.zones[toZone];
       if (!fz || !tz) return err("Invalid zones");
       if (!fz.adjacentZones.includes(toZone)) return err("Zones must be adjacent");
-      // Only block if the Soldier being moved IS the majority holder's Soldier AND they have majority
+      // Only block if the soldier being moved IS the majority holder's soldier AND they have majority
       const majority = checkMajority(fz);
-      if (majority !== null && majority === pegOwner) return err("Cannot move majority Soldiers");
+      if (majority !== null && majority === pegOwner) return err("Cannot move majority soldiers");
       const pi = fz.pegs.lastIndexOf(pegOwner);
-      if (pi === -1) return err("No such Soldier in that zone");
+      if (pi === -1) return err("No such soldier in that zone");
       fz.pegs.splice(pi, 1); tz.pegs.push(pegOwner);
       s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} used Swing Vote` });
       // Headline if this move fills the last slot
@@ -867,14 +867,14 @@ function useConspiracy(state, slot, instanceId, params = {}) {
         text: `${player.username} used Opposition Research — stole ${stolen} ${richest} from ${opp.username}` });
       break;
     }
-    case "convert_Soldier": {
+    case "convert_soldier": {
       // Level 5 nationalist power
       const zoneIdx = params.zoneIndex ?? s.zones.findIndex(z => gerrymanderRights(z) === slot && z.pegs.includes(oppSlot));
       const zone = s.zones[zoneIdx];
-      if (!zone || !zone.pegs.includes(oppSlot)) return err("No opponent Soldier to convert");
+      if (!zone || !zone.pegs.includes(oppSlot)) return err("No opponent soldier to convert");
       const pi = zone.pegs.lastIndexOf(oppSlot);
       zone.pegs[pi] = slot;
-      s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} converted an opponent Soldier in ${zone.name}` });
+      s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} converted an opponent soldier in ${zone.name}` });
       break;
     }
     default: return err("Unknown conspiracy effect");
@@ -953,7 +953,7 @@ function donations(state, slot) {
   return ok(s);
 }
 
-// nationalist L5: Payback — discard 2 opponent Soldiers from any zone
+// nationalist L5: Payback — discard 2 opponent soldiers from any zone
 function payback(state, slot, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -971,11 +971,11 @@ function payback(state, slot, zoneIndex) {
   }
   player.usedPowers['payback'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Payback — discarded ${removed} Soldiers from ${zone.name}` });
+    text: `${player.username} used Payback — discarded ${removed} soldiers from ${zone.name}` });
   return ok(_checkGameEnd(s));
 }
 
-// corporatist L5: Breaking Ground — evict 3 Soldiers from any zone
+// corporatist L5: Breaking Ground — evict 3 soldiers from any zone
 function breakingGround(state, slot, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -989,11 +989,11 @@ function breakingGround(state, slot, zoneIndex) {
   const removed = zone.pegs.splice(Math.max(0, zone.pegs.length - 3));
   player.usedPowers['breaking_ground'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Breaking Ground — evicted ${removed.length} Soldiers from ${zone.name}` });
+    text: `${player.username} used Breaking Ground — evicted ${removed.length} soldiers from ${zone.name}` });
   return ok(_checkGameEnd(s));
 }
 
-// progressive L5: Tough Love — convert 2 opponent Soldiers in zones you lead
+// progressive L5: Tough Love — convert 2 opponent soldiers in zones you lead
 function toughLove(state, slot, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -1010,10 +1010,10 @@ function toughLove(state, slot, zoneIndex) {
     const i = zone.pegs.lastIndexOf(oppSlot);
     zone.pegs[i] = slot; converted++;
   }
-  if (converted === 0) return err("No opponent Soldiers to convert");
+  if (converted === 0) return err("No opponent soldiers to convert");
   player.usedPowers['tough_love'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Tough Love — converted ${converted} Soldiers in ${zone.name}` });
+    text: `${player.username} used Tough Love — converted ${converted} soldiers in ${zone.name}` });
   return ok(_checkGameEnd(s));
 }
 
@@ -1071,17 +1071,17 @@ function _advanceTurn(state) {
 
 function _refreshSoldierCards(state) {
   // Keep any cards already showing, fill up to 4 from deck
-  const needed = 4 - state.SoldierCards.length;
-  if (needed <= 0) return state.SoldierCards;
+  const needed = 4 - state.soldierCards.length;
+  if (needed <= 0) return state.soldierCards;
   // Reshuffle deck if not enough cards
-  if (state.SoldierDeck.length < needed) {
-    const currentIds = new Set(state.SoldierCards.map(c => c.id));
-    const deckIds    = new Set(state.SoldierDeck);
-    const remaining  = Soldier_CARDS.filter(c => !currentIds.has(c.id) && !deckIds.has(c.id)).map(c => c.id);
-    state.SoldierDeck  = [...state.SoldierDeck, ...shuffle(remaining)];
+  if (state.soldierDeck.length < needed) {
+    const currentIds = new Set(state.soldierCards.map(c => c.id));
+    const deckIds    = new Set(state.soldierDeck);
+    const remaining  = SOLDIER_CARDS.filter(c => !currentIds.has(c.id) && !deckIds.has(c.id)).map(c => c.id);
+    state.soldierDeck  = [...state.soldierDeck, ...shuffle(remaining)];
   }
-  const drawn = state.SoldierDeck.splice(0, needed);
-  return [...state.SoldierCards, ...drawn.map(id => Soldier_CARDS.find(c => c.id === id)).filter(Boolean)];
+  const drawn = state.soldierDeck.splice(0, needed);
+  return [...state.soldierCards, ...drawn.map(id => SOLDIER_CARDS.find(c => c.id === id)).filter(Boolean)];
 }
 
 // ─── Exports ──────────────────────────────────────────────────────────────────
@@ -1109,7 +1109,7 @@ module.exports = {
   getScores,
   dominantIdeology,
   IDEOLOGY_CARDS,
-  Soldier_CARDS,
+  SOLDIER_CARDS,
   CONSPIRACY_CARDS,
   getConspiracyCost,
   HEADLINE_CARDS,
