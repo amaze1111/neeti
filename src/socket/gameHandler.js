@@ -8,6 +8,64 @@ const rooms          = new Map(); // roomCode → Set<WebSocket>
 const activeSessions = new Map(); // roomCode → gameState
 const matchmakingQueue = new Map(); // userId → { ws, user } — players waiting for a match
 
+function normalizeResourceKeyForEngine(key) {
+  return key === 'swarna' ? 'suvarna' : key;
+}
+
+function normalizeResourceMapForEngine(map) {
+  if (!map || typeof map !== 'object') return map;
+  const normalized = {};
+  for (const [key, value] of Object.entries(map)) {
+    normalized[normalizeResourceKeyForEngine(key)] = value;
+  }
+  return normalized;
+}
+
+function normalizeResourceMapForClient(map) {
+  if (!map || typeof map !== 'object') return map;
+  const normalized = {};
+  for (const [key, value] of Object.entries(map)) {
+    normalized[key === 'suvarna' ? 'swarna' : key] = value;
+  }
+  return normalized;
+}
+
+function normalizePlayerForClient(player) {
+  if (!player) return player;
+  return {
+    ...player,
+    swarna: player.swarna ?? player.suvarna ?? 0,
+  };
+}
+
+function normalizeSoldierCardForClient(card) {
+  if (!card) return card;
+  return {
+    ...card,
+    soldierCount: card.soldierCount ?? card.voterCount ?? 0,
+    cost: normalizeResourceMapForClient(card.cost),
+  };
+}
+
+function normalizeIdeologyCardForClient(card) {
+  if (!card) return card;
+  return {
+    ...card,
+    a: card.a ? { ...card.a, resources: normalizeResourceMapForClient(card.a.resources) } : card.a,
+    b: card.b ? { ...card.b, resources: normalizeResourceMapForClient(card.b.resources) } : card.b,
+  };
+}
+
+function normalizeStateForClient(state) {
+  if (!state) return state;
+  return {
+    ...state,
+    players: (state.players || []).map(normalizePlayerForClient),
+    soldierCards: (state.soldierCards || state.voterCards || []).map(normalizeSoldierCardForClient),
+    currentCard: state.currentCard ? normalizeIdeologyCardForClient(state.currentCard) : state.currentCard,
+  };
+}
+
 function send(ws, event, payload = {}) {
   if (ws.readyState === WebSocket.OPEN) {
     ws.send(JSON.stringify({ event, ...payload }));
@@ -64,10 +122,10 @@ module.exports = function attachWebSocket(server) {
         case 'game:influence_voter':  await handleMutate(ws, payload.roomCode, s => engine.influenceVoterCard(s, ws._slot, payload.voterCardId, payload.zoneIndex)); break;
         case 'game:influence_soldier': await handleMutate(ws, payload.roomCode, s => engine.influenceSoldierCard(s, ws._slot, payload.soldierCardId, payload.zoneIndex)); break;
         case 'game:gerrymander':      await handleMutate(ws, payload.roomCode, s => engine.gerrymander(s, ws._slot, payload.fromZoneIndex, payload.toZoneIndex, payload.pegOwnerSlot, payload.rightsZoneIndex)); break;
-        case 'game:buy_conspiracy':   await handleMutate(ws, payload.roomCode, s => engine.buyConspiracy(s, ws._slot, payload.payment || null)); break;
+        case 'game:buy_conspiracy':   await handleMutate(ws, payload.roomCode, s => engine.buyConspiracy(s, ws._slot, normalizeResourceMapForEngine(payload.payment) || null)); break;
         case 'game:use_conspiracy':   await handleMutate(ws, payload.roomCode, s => engine.useConspiracy(s, ws._slot, payload.instanceId, payload.params || {})); break;
-        case 'game:convert_resource': await handleMutate(ws, payload.roomCode, s => engine.convertResource(s, ws._slot, payload.from, payload.to)); break;
-        case 'game:prospecting':      await handleMutate(ws, payload.roomCode, s => engine.prospecting(s, ws._slot, payload.from, payload.to)); break;
+        case 'game:convert_resource': await handleMutate(ws, payload.roomCode, s => engine.convertResource(s, ws._slot, normalizeResourceKeyForEngine(payload.from), normalizeResourceKeyForEngine(payload.to))); break;
+        case 'game:prospecting':      await handleMutate(ws, payload.roomCode, s => engine.prospecting(s, ws._slot, normalizeResourceKeyForEngine(payload.from), normalizeResourceKeyForEngine(payload.to))); break;
         case 'game:donations':        await handleMutate(ws, payload.roomCode, s => engine.donations(s, ws._slot)); break;
         case 'game:payback':          await handleMutate(ws, payload.roomCode, s => engine.payback(s, ws._slot, payload.zoneIndex)); break;
         case 'game:breaking_ground':  await handleMutate(ws, payload.roomCode, s => engine.breakingGround(s, ws._slot, payload.zoneIndex)); break;
@@ -241,10 +299,11 @@ async function handleRoomJoin(ws, user, { roomCode }) {
           const topCard = engine.CONSPIRACY_CARDS.find(c => c.id === state.conspiracyDeck[0]);
           if (topCard) conspiracyCost = engine.getConspiracyCost(myPlayer, topCard.cost);
         }
-        send(ws, 'game:state', { state: { ...state, currentCard: null, players: sanitizedPlayers, conspiracyCost }, mySlot });
+        const stateForPlayer = normalizeStateForClient({ ...state, currentCard: null, players: sanitizedPlayers, conspiracyCost });
+        send(ws, 'game:state', { state: stateForPlayer, mySlot });
         // If it's this player's turn and there's a card waiting, send it
         if (state.currentCard && state.currentSlot === ws._slot) {
-          send(ws, 'game:card', { card: state.currentCard });
+          send(ws, 'game:card', { card: normalizeIdeologyCardForClient(state.currentCard) });
         }
       }
     }
@@ -378,6 +437,32 @@ async function runBotTurnForRoom(code, gameId) {
     await persistAndBroadcast(code, finalState, gameId);
   } catch (e) {
     console.error('Bot turn error:', e);
+    let recoveryState = activeSessions.get(code) || state;
+    if (!recoveryState || recoveryState.winner !== null || recoveryState.phase === 'finished') return;
+    if (recoveryState.currentSlot !== 2) return;
+
+    if (recoveryState.phase === 'ideology') {
+      if (!recoveryState.currentCard) {
+        const drawn = engine.drawCard(recoveryState);
+        if (drawn.ok) recoveryState = drawn.state;
+      }
+      if (recoveryState.currentCard) {
+        const answered = engine.answerCard(recoveryState, 2, 'a');
+        if (answered.ok) recoveryState = answered.state;
+      }
+    }
+
+    if (recoveryState.phase === 'action' && recoveryState.currentSlot === 2) {
+      const ended = engine.endTurn(recoveryState, 2);
+      if (ended.ok) recoveryState = ended.state;
+    }
+
+    if (recoveryState.phase === 'ideology' && !recoveryState.currentCard && recoveryState.winner === null) {
+      const drawn = engine.drawCard(recoveryState);
+      if (drawn.ok) recoveryState = drawn.state;
+    }
+
+    await persistAndBroadcast(code, recoveryState, gameId);
   }
 }
 
@@ -412,7 +497,7 @@ async function persistAndBroadcast(code, state, gameId) {
       const topCard = engine.CONSPIRACY_CARDS.find(c => c.id === topCardId);
       if (topCard) conspiracyCost = engine.getConspiracyCost(myPlayer, topCard.cost);
     }
-    const stateForPlayer = { ...state, currentCard: null, players: sanitizedPlayers, conspiracyCost };
+    const stateForPlayer = normalizeStateForClient({ ...state, currentCard: null, players: sanitizedPlayers, conspiracyCost });
     send(ws, 'game:state', { state: stateForPlayer, mySlot });
   }
 
@@ -420,7 +505,7 @@ async function persistAndBroadcast(code, state, gameId) {
   if (state.currentCard) {
         const currentWs = [...wsSet].find(w => w._slot === state.currentSlot);
     if (currentWs) {
-      send(currentWs, 'game:card', { card: state.currentCard });
+      send(currentWs, 'game:card', { card: normalizeIdeologyCardForClient(state.currentCard) });
     } else {
       console.log(`❌ No WebSocket found for slot ${state.currentSlot}!`);
     }
@@ -456,12 +541,12 @@ async function startGame(code, room, players) {
     // Send sanitized state to each player (no currentCard, no opponent conspiracies)
     const startWsSet = rooms.get(code) || new Set();
     for (const ws of startWsSet) {
-      const stateForPlayer = { ...state, currentCard: null };
+      const stateForPlayer = normalizeStateForClient({ ...state, currentCard: null });
       send(ws, 'game:state', { state: stateForPlayer, mySlot: ws._slot });
     }
     // Send card only to slot 1 (first player)
     const slot1Ws = [...startWsSet].find(w => w._slot === 1);
-    if (slot1Ws) send(slot1Ws, 'game:card', { card: state.currentCard });
+    if (slot1Ws) send(slot1Ws, 'game:card', { card: normalizeIdeologyCardForClient(state.currentCard) });
     console.log(`🎮 Game started in room ${code} (bot: ${room.is_bot})`);
   } catch (e) {
     await client.query('ROLLBACK');
