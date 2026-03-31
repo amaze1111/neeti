@@ -493,3 +493,4 @@ async function handleGameOver(code, state, gameId) {
 module.exports.markAsBotRoom = function(code) {
   // No-op — bot status now stored in DB
 };
+
