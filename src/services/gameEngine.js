@@ -535,70 +535,72 @@ function influenceSoldierCard(state, slot, soldierCardId, zoneIndex) {
   const s      = syncSoldierCards(JSON.parse(JSON.stringify(state)));
   const player = s.players.find(p => p.slot === slot);
   const zone   = s.zones[zoneIndex];
-  const cardPool = Array.isArray(s.soldierCards) && s.soldierCards.length > 0 ? s.soldierCards : (s.soldierCards || []);
+  const cardPool = Array.isArray(s.soldierCards) && s.soldierCards.length > 0 ? s.soldierCards : [];
   const card   = cardPool.find(c => c.id === soldierCardId);
 
   if (!zone)  return err("Invalid zone");
   if (!card)  return err("Soldier card not available");
-  // Majority does NOT lock a zone — players can keep placing soldiers (affects gerrymander)
 
   const spacesLeft = zone.capacity - zone.pegs.length;
   if (spacesLeft < card.soldierCount) return err(`Need ${card.soldierCount} spaces, only ${spacesLeft} left`);
 
-  // Apply power discounts
-  const cost = getsoldierCost(player, card.cost);
+  const cost = getSoldierCost(player, card.cost);
   if (!canAfford(player, cost)) {
     return err(`Need ${Object.entries(cost).map(([r,v]) => `${v} ${r}`).join(", ")}`);
   }
 
   deductCost(player, cost);
-  // Track helping hands discount usage
+
   if (player.helpingHandsActive && (player.helpingHandsUsed || 0) < 2) {
     player.helpingHandsUsed = (player.helpingHandsUsed || 0) + 1;
     if (player.helpingHandsUsed >= 2) player.helpingHandsActive = false;
   }
 
-  // Level 3 populist: Going Viral — +1 extra soldier per card
-  const extrasoldiers = player.ideologyCards.sama >= 3 ? 1 : 0;
-  const totalsoldiers = card.soldierCount + extrasoldiers;
+  const extraSoldiers = player.ideologyCards.sama >= 3 ? 1 : 0;
+  const totalSoldiers = card.soldierCount + extraSoldiers;
   const actualSpacesLeft = zone.capacity - zone.pegs.length;
-  const soldiersToPlace = Math.min(totalsoldiers, actualSpacesLeft);
+  const soldiersToPlace = Math.min(totalSoldiers, actualSpacesLeft);
 
-  // Level 5 populist: Election Fever — +1 gerrymander/zone
   if (player.ideologyCards.sama >= 5) {
     s.electionFeverActive = true;
   }
 
-  // Place soldiers — last slot in zone is volatile, triggers headline against the placer
-  const volatileSlotIndex = zone.capacity - 1; // last slot is volatile
+  const volatileSlotIndex = zone.capacity - 1;
   for (let i = 0; i < soldiersToPlace; i++) {
-    const filledSlotIndex = zone.pegs.length; // index before pushing
+    const filledSlotIndex = zone.pegs.length;
     zone.pegs.push(slot);
-    // If this soldier filled the volatile slot (last slot), trigger headline
+
     if (filledSlotIndex === volatileSlotIndex && !s.pendingHeadline) {
-      // Reshuffle deck if exhausted
       if (s.headlineDeck.length === 0) {
         s.headlineDeck = shuffle(HEADLINE_CARDS.map(c => c.id));
       }
       const headlineId = s.headlineDeck.shift();
       const headline = HEADLINE_CARDS.find(h => h.id === headlineId);
       s.pendingHeadline = { ...headline, triggerSlot: slot, zoneName: zone.name };
-      s.log.unshift({ turn: s.turn, slot, type: "headline",
-        text: `📰 HEADLINE triggered: "${headline.title}" — volatile slot filled in ${zone.name}` });
+      s.log.unshift({
+        turn: s.turn,
+        slot,
+        type: "headline",
+        text: `HEADLINE triggered: "${headline.title}" - volatile slot filled in ${zone.name}`
+      });
     }
   }
 
-  s.log.unshift({ turn: s.turn, slot, type: "influence_soldier",
-    text: `${player.username} placed ${soldiersToPlace} soldier${soldiersToPlace > 1 ? "s" : ""} (${card.label}) in ${zone.name}` });
+  s.log.unshift({
+    turn: s.turn,
+    slot,
+    type: "influence_soldier",
+    text: `${player.username} placed ${soldiersToPlace} soldier${soldiersToPlace > 1 ? "s" : ""} (${card.label}) in ${zone.name}`
+  });
 
-  // Replace used soldier card
   s.soldierCards = s.soldierCards.filter(c => c.id !== soldierCardId);
-  // Reshuffle if deck is empty
+
   if (s.soldierDeck.length === 0) {
     const currentIds = new Set(s.soldierCards.map(c => c.id));
     s.soldierDeck = shuffle(SOLDIER_CARDS.filter(c => !currentIds.has(c.id)).map(c => c.id));
-    s.log.unshift({ turn: s.turn, slot, type: "info", text: "🔄 soldier card deck reshuffled." });
+    s.log.unshift({ turn: s.turn, slot, type: "info", text: "Soldier card deck reshuffled." });
   }
+
   const newId = s.soldierDeck.shift();
   const newCard = SOLDIER_CARDS.find(c => c.id === newId);
   if (newCard) s.soldierCards.push(newCard);
@@ -606,11 +608,6 @@ function influenceSoldierCard(state, slot, soldierCardId, zoneIndex) {
   syncSoldierCards(s);
   return ok(_checkGameEnd(s));
 }
-
-function influenceSoldierCard(state, slot, soldierCardId, zoneIndex) {
-  return influenceSoldierCard(state, slot, soldierCardId, zoneIndex);
-}
-
 // ─── progressive L3: Helping Hands — 2 discount tokens on soldier cards ───────────
 function helpingHands(state, slot) {
   if (state.phase !== "action")   return err("Not in action phase");
