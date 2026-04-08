@@ -61,14 +61,13 @@ function pickFirstColumn(columns, candidates) {
 async function insertUser({ username, email, hash, displayName = username, avatarSeed = username }) {
   const columns = await getUserTableColumns();
   const userId = uuidv4();
-  const passwordColumn = pickFirstColumn(columns, [
-    'password',
-    'password_hash',
-    'hashed_password',
-    'passhash',
-    'passwd',
-  ]);
-
+ const passwordColumn = pickFirstColumn(columns, [
+  'password_hash',   // 👈 prioritize this
+  'password',
+  'hashed_password',
+  'passhash',
+  'passwd',
+]);
   if (!passwordColumn) {
     const error = new Error('No password column found on users table');
     error.code = 'NO_PASSWORD_COLUMN';
@@ -97,13 +96,13 @@ async function insertUser({ username, email, hash, displayName = username, avata
 
 async function findUserByEmail(email) {
   const columns = await getUserTableColumns();
-  const passwordColumn = pickFirstColumn(columns, [
-    'password',
-    'password_hash',
-    'hashed_password',
-    'passhash',
-    'passwd',
-  ]);
+ const passwordColumn = pickFirstColumn(columns, [
+  'password_hash',   // 👈 prioritize this
+  'password',
+  'hashed_password',
+  'passhash',
+  'passwd',
+]);
   const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
   return { user: rows[0], columns, passwordColumn };
 }
