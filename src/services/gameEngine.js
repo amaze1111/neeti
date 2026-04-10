@@ -9,21 +9,17 @@
  *  - Passive income correctly calculated per turn start
  */
 
-// ─── Zones ────────────────────────────────────────────────────────────────────
-
 const ZONES = [
-  { name: "Hastinapura",    capacity: 11, majority: 6,  points: 11, adjacentZones: [1, 2, 3, 4, 5],       volatile: true },
-  { name: "Gandhara",    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 3],                volatile: true },
-  { name: "Anga",   capacity: 6,  majority: 4,  points: 6,  adjacentZones: [0, 5],                volatile: true },
-  { name: "Matsya",    capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 1, 4, 6],          volatile: true },
-  { name: "Kurukshetra", capacity: 5,  majority: 3,  points: 5,  adjacentZones: [0, 3, 5, 6, 7, 8],   volatile: true },
-  { name: "Kashi",     capacity: 9,  majority: 5,  points: 9,  adjacentZones: [0, 2, 4, 8],          volatile: true },
-  { name: "Panchala",    capacity: 6,  majority: 4,  points: 6,  adjacentZones: [3, 4, 7],             volatile: true },
-  { name: "Magadha",    capacity: 11, majority: 6,  points: 11, adjacentZones: [4, 6, 8],             volatile: true },
-  { name: "Videha",     capacity: 6,  majority: 4,  points: 6,  adjacentZones: [4, 5, 7],             volatile: true },
+  { name: "Hastinapura", capacity: 11, majority: 6, points: 11, adjacentZones: [1, 2, 3, 4, 5], volatile: true },
+  { name: "Gandhara", capacity: 9, majority: 5, points: 9, adjacentZones: [0, 3], volatile: true },
+  { name: "Anga", capacity: 6, majority: 4, points: 6, adjacentZones: [0, 5], volatile: true },
+  { name: "Matsya", capacity: 9, majority: 5, points: 9, adjacentZones: [0, 1, 4, 6], volatile: true },
+  { name: "Kurukshetra", capacity: 5, majority: 3, points: 5, adjacentZones: [0, 3, 5, 6, 7, 8], volatile: true },
+  { name: "Kashi", capacity: 9, majority: 5, points: 9, adjacentZones: [0, 2, 4, 8], volatile: true },
+  { name: "Panchala", capacity: 6, majority: 4, points: 6, adjacentZones: [3, 4, 7], volatile: true },
+  { name: "Magadha", capacity: 11, majority: 6, points: 11, adjacentZones: [4, 6, 8], volatile: true },
+  { name: "Videha", capacity: 6, majority: 4, points: 6, adjacentZones: [4, 5, 7], volatile: true },
 ];
-
-// ─── Shastra Cards (Dilemmas of the Sabha) ───────────────────────────────────
 
 const IDEOLOGY_CARDS = [
   { id: "ic_01", question: "Duryodhana offers you vast wealth to betray the Pandavas. Do you accept?",
@@ -38,9 +34,9 @@ const IDEOLOGY_CARDS = [
   { id: "ic_04", question: "shakuni proposes a game of dice. Do you accept the challenge?",
     a: { text: "Yes — to refuse is cowardice. A king must not flinch.", ideology: "danda", resources: { shakti: 2, suvarna: 1 } },
     b: { text: "No — wisdom is knowing when not to gamble.", ideology: "dharma", resources: { satya: 3 } } },
-  { id: "ic_05", question: "Krishna offers you his army or himself as a counsellor. What do you choose?",
+  { id: "ic_05", question: "A divine strategist offers you his army or himself as a counsellor. What do you choose?",
     a: { text: "His army — numbers and steel win wars.", ideology: "artha", resources: { suvarna: 2, shakti: 1 } },
-    b: { text: "Krishna himself — divine wisdom is worth more than any army.", ideology: "dharma", resources: { satya: 2, kirti: 1 } } },
+    b: { text: "The counsellor himself — divine wisdom is worth more than any army.", ideology: "dharma", resources: { satya: 2, kirti: 1 } } },
   { id: "ic_06", question: "A spy reveals the enemy's battle plans. The spy demands a high price. Do you pay?",
     a: { text: "Yes — information is the greatest weapon in war.", ideology: "artha", resources: { suvarna: 3 } },
     b: { text: "No — build alliances of trust, not transactions.", ideology: "dharma", resources: { satya: 2, kirti: 1 } } },
@@ -128,7 +124,7 @@ const IDEOLOGY_CARDS = [
   { id: "ic_34", question: "A forest tribe offers fierce warriors in exchange for land rights. Do you agree?",
     a: { text: "Yes — warriors are needed now. Deal with the land later.", ideology: "artha", resources: { suvarna: 2, shakti: 1 } },
     b: { text: "Yes and honour it fully — alliances kept are alliances strengthened.", ideology: "dharma", resources: { satya: 2, kirti: 1 } } },
-  { id: "ic_35", question: "Krishna uses illusion to save Arjuna at a critical moment. Do you use such tactics?",
+  { id: "ic_35", question: "A strategist uses illusion to save an ally at a critical moment. Do you use such tactics?",
     a: { text: "Yes — dharma adapts. Saving the righteous is always justified.", ideology: "sama", resources: { kirti: 2, satya: 1 } },
     b: { text: "No — illusion in battle is deception and mars the soul.", ideology: "dharma", resources: { satya: 3 } } },
   { id: "ic_36", question: "Your spies report that the enemy plans a night attack — against the laws of war. Do you respond in kind?",
@@ -235,7 +231,7 @@ const CONSPIRACY_CARDS = [
   { id: "cc_02", name: "Karna's Army",      desc: "Deploy 3 of your warriors into any one kingdom for free.", effect: "place_free_voters",     cost: 5 },
   { id: "cc_03", name: "Drona's Silence",   desc: "Opponent loses 3 Kirti.",                                  effect: "steal_kirti",           cost: 4 },
   { id: "cc_04", name: "Treasury Raid",      desc: "Opponent loses 3 Suvarna.",                               effect: "steal_suvarna",         cost: 4 },
-  { id: "cc_05", name: "Krishna's Counsel", desc: "Gain 3 Satya immediately.",                               effect: "gain_satya",            cost: 4 },
+  { id: "cc_05", name: "Sage's Counsel",   desc: "Gain 3 Satya immediately.",                               effect: "gain_satya",            cost: 4 },
   { id: "cc_06", name: "Bhima's Roar",      desc: "Gain 3 Shakti immediately.",                              effect: "gain_shakti",           cost: 4 },
   { id: "cc_07", name: "Hidden Wealth",      desc: "Gain 4 Suvarna immediately.",                             effect: "gain_suvarna",          cost: 4 },
   { id: "cc_08", name: "Vidura's Wisdom",   desc: "Move any 1 non-majority warrior to a bordering kingdom.", effect: "swing_vote",            cost: 5 },
@@ -272,7 +268,7 @@ const IDEOLOGY_POWERS = {
   ],
   sama: [
     { at: 2, name: "Passive Income",    desc: "+1 Kirti each turn for every 2 Sama cards." },
-    { at: 3, name: "Krishna's Leela",  desc: "+1 extra warrior deployed per ally card this turn." },
+    { at: 3, name: "Public Momentum",  desc: "Once per turn: buy one conspiracy card for 1 less resource." },
     { at: 5, name: "Conch of Victory",  desc: "+1 extra Yuddha Neeti move per kingdom this turn." },
   ],
   dharma: [
@@ -402,8 +398,10 @@ function getVoterCost(player, baseCost) {
 
 // Apply conspiracy cost reduction from ideology powers
 function getConspiracyCost(player, baseCost) {
-  // Level 3 populist: conspiracy cards cost 1 less
-  if (player.ideologyCards.sama >= 3) return Math.max(1, baseCost - 1);
+  // Level 3 Sama: first conspiracy card each turn costs 1 less
+  if (player.ideologyCards.sama >= 3 && !player.usedPowers?.sama_conspiracy_discount) {
+    return Math.max(1, baseCost - 1);
+  }
   return baseCost;
 }
 
@@ -775,6 +773,9 @@ function buyConspiracy(state, slot, payment = null) {
   const nextId   = s.conspiracyDeck[0];
   const nextCard = CONSPIRACY_CARDS.find(c => c.id === nextId);
   const cost     = getConspiracyCost(player, nextCard.cost);
+  const usedSamaDiscount = player.ideologyCards.sama >= 3 &&
+    !player.usedPowers?.sama_conspiracy_discount &&
+    cost < nextCard.cost;
 
   if (totalResources(player) < cost) {
     return err(`Need at least ${cost} total resources to buy a conspiracy card`);
@@ -800,6 +801,10 @@ function buyConspiracy(state, slot, payment = null) {
 
   s.conspiracyDeck.shift();
   player.conspiracies.push({ ...nextCard, instanceId: `${nextCard.id}_${Date.now()}` });
+  if (usedSamaDiscount) {
+    player.usedPowers = player.usedPowers || {};
+    player.usedPowers.sama_conspiracy_discount = true;
+  }
 
   s.log.unshift({ turn: s.turn, slot, type: "buy_conspiracy",
     text: `${player.username} acquired a conspiracy card (cost ${cost})` });
@@ -850,7 +855,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
     }
     case "steal_kirti":   opp.kirti   = Math.max(0, opp.kirti   - 3); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Drona's Silence on ${opp.username}` }); break;
     case "steal_suvarna": opp.suvarna = Math.max(0, opp.suvarna - 3); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} raided ${opp.username}'s treasury` }); break;
-    case "gain_satya":    player.satya  += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Krishna's Counsel (+3 Satya)` }); break;
+    case "gain_satya":    player.satya  += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Sage's Counsel (+3 Satya)` }); break;
     case "gain_shakti":   player.shakti += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Bhima's Roar (+3 Shakti)` }); break;
     case "gain_suvarna":  player.suvarna += 4; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} revealed Hidden Wealth (+4 Suvarna)` }); break;
     case "swing_vote": {
