@@ -379,7 +379,10 @@ async function handleReady(ws, user, { roomCode }) {
       }
     } else {
       // Multiplayer: all players must be ready
-      const allReady = players.length === room.max_players && players.every(p => p.is_ready);
+      const maxPlayersRaw = room.max_players ?? room.maxPlayers;
+      const maxPlayers = Number.parseInt(String(maxPlayersRaw ?? ''), 10);
+      const requiredPlayers = Number.isFinite(maxPlayers) && maxPlayers > 1 ? maxPlayers : 2;
+      const allReady = players.length >= requiredPlayers && players.every(p => p.is_ready);
       if (allReady) await startGame(code, room, players);
     }
   } catch (e) {
