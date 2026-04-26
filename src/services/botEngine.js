@@ -138,7 +138,7 @@ function chooseHardAction(state, botSlot, bot, opponent, affordableCards, canBuy
   }
 
   const incursionMove = findIncursionMove(state, botSlot);
-  if (incursionMove) return { type: 'incursion', ...incursion
+  if (incursionMove) return { type: 'incursion', ...incursion }
   if (action.type === 'influence_voter') {
     const card = action.card;
     const zoneIndex = action.zoneIndex ?? chooseBestZone(state, botSlot, cardUnits(card));
