@@ -680,7 +680,7 @@ function resolveHeadline(state, slot) {
 
 // ─── Incursion ─────────────────────────────────────────────────────────────
 
-function incursionmander(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, rightsZoneIndex) {
+function incursion(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, rightsZoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
 
@@ -730,7 +730,7 @@ function incursionmander(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, 
   s.incursionUsed[rIdx] = true;
 
   const movedName = s.players.find(p => p.slot === pegOwnerSlot)?.username || `P${pegOwnerSlot}`;
-  s.log.unshift({ turn: s.turn, slot, type: "incursionmander",
+  s.log.unshift({ turn: s.turn, slot, type: "incursion",
     text: `${player.username} moved ${movedName}'s voter: ${fromZ.name} → ${toZ.name} (using ${rZ.name} rights)` });
 
   // Headline triggers when this move fills the last slot of the destination zone
