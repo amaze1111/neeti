@@ -712,10 +712,10 @@ function incursion(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, rights
   if (checkMajority(fromZ) === pegOwnerSlot && myPegsInFrom <= fromZ.majority) {
     return err("Cannot incur majority-forming soldiers");
   }
-  // Level 3 nationalist: opponent cannot remove your majority voters via incursion
+  // Level 3 nationalist: opponent cannot remove your majority soldiers via incursion
   if (pegOwnerSlot !== slot && checkMajority(fromZ) === pegOwnerSlot &&
       s.players.find(p => p.slot === pegOwnerSlot)?.ideologyCards?.danda >= 3) {
-    return err("Opponent\'s majority voters are protected by Stronghold");
+    return err("Opponent\'s majority soldiers are protected by Stronghold");
   }
 
   // Track used rights by the RIGHTS zone index (not fromZone)
@@ -723,7 +723,7 @@ function incursion(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, rights
   if (s.incursionUsed[rIdx]) return err(`Already used incursion rights of ${rZ.name} this turn`);
 
   const pegIdx = fromZ.pegs.lastIndexOf(pegOwnerSlot);
-  if (pegIdx === -1) return err("No such voter in that zone");
+  if (pegIdx === -1) return err("No such soldier in that zone");
 
   fromZ.pegs.splice(pegIdx, 1);
   toZ.pegs.push(pegOwnerSlot);
@@ -731,7 +731,7 @@ function incursion(state, slot, fromZoneIndex, toZoneIndex, pegOwnerSlot, rights
 
   const movedName = s.players.find(p => p.slot === pegOwnerSlot)?.username || `P${pegOwnerSlot}`;
   s.log.unshift({ turn: s.turn, slot, type: "incursion",
-    text: `${player.username} moved ${movedName}'s voter: ${fromZ.name} → ${toZ.name} (using ${rZ.name} rights)` });
+    text: `${player.username} moved ${movedName}'s soldier: ${fromZ.name} → ${toZ.name} (using ${rZ.name} rights)` });
 
   // Headline triggers when this move fills the last slot of the destination zone
   if (toZ.pegs.length === toZ.capacity && !s.pendingHeadline) {
@@ -829,7 +829,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
         zone.pegs.splice(zone.pegs.lastIndexOf(oppSlot), 1); removed++;
       }
       s.log.unshift({ turn: s.turn, slot, type: "conspiracy",
-        text: `${player.username} ran Smear Campaign — removed ${removed} of ${opp.username}'s voters from ${zone.name}` });
+        text: `${player.username} ran Smear Campaign — removed ${removed} of ${opp.username}'s soldiers from ${zone.name}` });
       break;
     }
     case "place_free_voters": {
@@ -839,7 +839,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
       const canPlace = Math.min(3, zone.capacity - zone.pegs.length);
       for (let i = 0; i < canPlace; i++) zone.pegs.push(slot);
       s.log.unshift({ turn: s.turn, slot, type: "conspiracy",
-        text: `${player.username} used Bloc Mobilization — placed ${canPlace} voters in ${zone.name}` });
+        text: `${player.username} used Bloc Mobilization — placed ${canPlace} soldiers in ${zone.name}` });
       break;
     }
     case "steal_kirti":   opp.kirti   = Math.max(0, opp.kirti   - 3); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Drona's Silence on ${opp.username}` }); break;
@@ -853,11 +853,11 @@ function useConspiracy(state, slot, instanceId, params = {}) {
       const fz = s.zones[fromZone], tz = s.zones[toZone];
       if (!fz || !tz) return err("Invalid zones");
       if (!fz.adjacentZones.includes(toZone)) return err("Zones must be adjacent");
-      // Only block if the voter being moved IS the majority holder's voter AND they have majority
+      // Only block if the soldier being moved IS the majority holder's soldier AND they have majority
       const majority = checkMajority(fz);
-      if (majority !== null && majority === pegOwner) return err("Cannot move majority voters");
+      if (majority !== null && majority === pegOwner) return err("Cannot move majority soldiers");
       const pi = fz.pegs.lastIndexOf(pegOwner);
-      if (pi === -1) return err("No such voter in that zone");
+      if (pi === -1) return err("No such soldier in that zone");
       fz.pegs.splice(pi, 1); tz.pegs.push(pegOwner);
       s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} used Swing Vote` });
       // Headline if this move fills the last slot
@@ -884,10 +884,10 @@ function useConspiracy(state, slot, instanceId, params = {}) {
       // Level 5 nationalist power
       const zoneIdx = params.zoneIndex ?? s.zones.findIndex(z => incursionRights(z) === slot && z.pegs.includes(oppSlot));
       const zone = s.zones[zoneIdx];
-      if (!zone || !zone.pegs.includes(oppSlot)) return err("No opponent voter to convert");
+      if (!zone || !zone.pegs.includes(oppSlot)) return err("No opponent soldier to convert");
       const pi = zone.pegs.lastIndexOf(oppSlot);
       zone.pegs[pi] = slot;
-      s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} converted an opponent voter in ${zone.name}` });
+      s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} converted an opponent soldier in ${zone.name}` });
       break;
     }
     default: return err("Unknown conspiracy effect");
@@ -966,7 +966,7 @@ function donations(state, slot) {
   return ok(s);
 }
 
-// nationalist L5: Payback — discard 2 opponent voters from any zone
+// nationalist L5: Payback — discard 2 opponent soldiers from any zone
 function payback(state, slot, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -984,11 +984,11 @@ function payback(state, slot, zoneIndex) {
   }
   player.usedPowers['payback'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Payback — discarded ${removed} voters from ${zone.name}` });
+    text: `${player.username} used Payback — discarded ${removed} soldiers from ${zone.name}` });
   return ok(_checkGameEnd(s));
 }
 
-// corporatist L5: Breaking Ground — evict 3 voters from any zone
+// corporatist L5: Breaking Ground — evict 3 soldiers from any zone
 function breakingGround(state, slot, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -1002,11 +1002,11 @@ function breakingGround(state, slot, zoneIndex) {
   const removed = zone.pegs.splice(Math.max(0, zone.pegs.length - 3));
   player.usedPowers['breaking_ground'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Breaking Ground — evicted ${removed.length} voters from ${zone.name}` });
+    text: `${player.username} used Breaking Ground — evicted ${removed.length} soldiers from ${zone.name}` });
   return ok(_checkGameEnd(s));
 }
 
-// progressive L5: Tough Love — convert 2 opponent voters in zones you lead
+// progressive L5: Tough Love — convert 2 opponent soldiers in zones you lead
 function toughLove(state, slot, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -1023,10 +1023,10 @@ function toughLove(state, slot, zoneIndex) {
     const i = zone.pegs.lastIndexOf(oppSlot);
     zone.pegs[i] = slot; converted++;
   }
-  if (converted === 0) return err("No opponent voters to convert");
+  if (converted === 0) return err("No opponent soldiers to convert");
   player.usedPowers['tough_love'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Tough Love — converted ${converted} voters in ${zone.name}` });
+    text: `${player.username} used Tough Love — converted ${converted} soldiers in ${zone.name}` });
   return ok(_checkGameEnd(s));
 }
 
