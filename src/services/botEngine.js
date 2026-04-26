@@ -1,9 +1,3 @@
-/**
- * SHASN Bot Engine
- * Makes strategic decisions for the AI opponent (slot 2).
- * Called by the socket handler after the bot's ideology card is drawn.
- */
-
 const engine = require('./gameEngine');
 
 // easy:   random decisions
@@ -120,8 +114,8 @@ function chooseMediumAction(state, botSlot, bot, opponent, affordableCards, canB
     return { type: 'buy_conspiracy' };
   }
 
-  const gerryMove = findGerrymanderMove(state, botSlot);
-  if (gerryMove) return { type: 'gerrymander', ...gerryMove };
+  const incursionMove = findIncursionMove(state, botSlot);
+  if (incursionMove) return { type: 'incursion', ...incursionMove };
 
   return null;
 }
@@ -143,16 +137,8 @@ function chooseHardAction(state, botSlot, bot, opponent, affordableCards, canBuy
     if (bestCard) return { type: 'influence_voter', card: bestCard };
   }
 
-  const gerryMove = findGerrymanderMove(state, botSlot);
-  if (gerryMove) return { type: 'gerrymander', ...gerryMove };
-
-  if (canBuyConspiracy) return { type: 'buy_conspiracy' };
-  return null;
-}
-
-function executeBotAction(state, botSlot, action) {
-  if (!action) return { ok: false };
-
+  const incursionMove = findIncursionMove(state, botSlot);
+  if (incursionMove) return { type: 'incursion', ...incursion
   if (action.type === 'influence_voter') {
     const card = action.card;
     const zoneIndex = action.zoneIndex ?? chooseBestZone(state, botSlot, cardUnits(card));
@@ -160,8 +146,8 @@ function executeBotAction(state, botSlot, action) {
     return engine.influenceVoterCard(state, botSlot, card.id, zoneIndex);
   }
 
-  if (action.type === 'gerrymander') {
-    return engine.gerrymander(state, botSlot, action.fromZone, action.toZone, action.pegOwner);
+  if (action.type === 'incursion') {
+    return engine.incursion(state, botSlot, action.fromZone, action.toZone, action.pegOwner);
   }
 
   if (action.type === 'buy_conspiracy') {
@@ -251,11 +237,11 @@ function findBlockingMove(state, botSlot, affordableCards) {
   return null;
 }
 
-function findGerrymanderMove(state, botSlot) {
+function findIncursionMove(state, botSlot) {
   const oppSlot = botSlot === 1 ? 2 : 1;
 
   for (const [fromIndex, fromZone] of state.zones.entries()) {
-    if (engine.gerrymanderRights(fromZone) !== botSlot) continue;
+    if (engine.incursionRights(fromZone) !== botSlot) continue;
     if (engine.checkMajority(fromZone) !== null) continue;
 
     if (fromZone.pegs.includes(oppSlot)) {
@@ -311,7 +297,7 @@ function buildConspiracyParams(state, botSlot, card) {
   }
 
   if (card.effect === 'convert_voter') {
-    const zoneIdx = state.zones.findIndex(z => engine.gerrymanderRights(z) === botSlot && z.pegs.includes(oppSlot));
+    const zoneIdx = state.zones.findIndex(z => engine.incursionRights(z) === botSlot && z.pegs.includes(oppSlot));
     if (zoneIdx !== -1) params.zoneIndex = zoneIdx;
   }
 
