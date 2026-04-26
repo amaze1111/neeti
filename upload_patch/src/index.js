@@ -18,7 +18,7 @@ async function seedBotUser() {
   try {
     await pool.query(`
       INSERT INTO users (id, username, email, password)
-      VALUES ('00000000-0000-0000-0000-000000000001', 'BOT', 'bot@shasn.internal', 'no-auth')
+      VALUES ('00000000-0000-0000-0000-000000000001', 'BOT', 'bot@neeti.internal', 'no-auth')
       ON CONFLICT (id) DO NOTHING
     `);
     console.log('Bot user ready');
