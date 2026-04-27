@@ -20,7 +20,7 @@ const IDEOLOGY_CARDS = [
   { id: "ic_03", question: "The people of a conquered kingdom resist. Do you rule by fear or win their hearts?",
     a: { text: "Rule by force — swift and clear authority prevents rebellion.", ideology: "danda", resources: { shakti: 3 } },
     b: { text: "Win their hearts — lasting loyalty is built through compassion.", ideology: "sama", resources: { kirti: 2, satya: 1 } } },
-  { id: "ic_04", question: "shakuni proposes a game of dice. Do you accept the challenge?",
+  { id: "ic_04", question: "Shakuni proposes a game of dice. Do you accept the challenge?",
     a: { text: "Yes — to refuse is cowardice. A king must not flinch.", ideology: "danda", resources: { shakti: 2, swarna: 1 } },
     b: { text: "No — wisdom is knowing when not to gamble.", ideology: "dharma", resources: { satya: 3 } } },
   { id: "ic_05", question: "A divine strategist offers you his army or himself as a counsellor. What do you choose?",
@@ -33,8 +33,8 @@ const IDEOLOGY_CARDS = [
     a: { text: "Yes — preserving the established order protects the kingdom.", ideology: "danda", resources: { shakti: 2, swarna: 1 } },
     b: { text: "No — this is injustice. Talent must not be crushed.", ideology: "dharma", resources: { satya: 3 } } },
   { id: "ic_08", question: "Draupadi has been humiliated in the Sabha. The assembly is silent. Do you speak?",
-    a: { text: "speak boldly — injustice answered with silence is complicity.", ideology: "dharma", resources: { satya: 2, kirti: 1 } },
-    b: { text: "stay silent — the laws of the game must be upheld.", ideology: "danda", resources: { shakti: 3 } } },
+    a: { text: "Speak boldly — injustice answered with silence is complicity.", ideology: "dharma", resources: { satya: 2, kirti: 1 } },
+    b: { text: "Stay silent — the laws of the game must be upheld.", ideology: "danda", resources: { shakti: 3 } } },
   { id: "ic_09", question: "Bhishma is invincible but stands against dharma. How do you face him?",
     a: { text: "Use Shikhandi — sometimes strategy must override honour.", ideology: "artha", resources: { swarna: 2, kirti: 1 } },
     b: { text: "Face him directly — a warrior must not hide behind others.", ideology: "danda", resources: { shakti: 3 } } },
@@ -62,7 +62,7 @@ const IDEOLOGY_CARDS = [
   { id: "ic_17", question: "Nakula is skilled with horses and wants to build the greatest cavalry. Do you fund it?",
     a: { text: "Yes — swift cavalry decides the fate of battles.", ideology: "artha", resources: { swarna: 2, shakti: 1 } },
     b: { text: "Partially — balance the army rather than over-invest in one arm.", ideology: "danda", resources: { shakti: 2, swarna: 1 } } },
-  { id: "ic_18", question: "sahadeva's prophecy reveals the perfect day to start the war. Do you trust it?",
+  { id: "ic_18", question: "Sahadeva's prophecy reveals the perfect day to start the war. Do you trust it?",
     a: { text: "Yes — knowledge of the stars is knowledge of fate.", ideology: "dharma", resources: { satya: 2, kirti: 1 } },
     b: { text: "No — men make their own fate. Act when ready, not when stars say so.", ideology: "danda", resources: { shakti: 2, swarna: 1 } } },
   { id: "ic_19", question: "Duryodhana insults you publicly in the court. How do you respond?",
@@ -80,7 +80,7 @@ const IDEOLOGY_CARDS = [
   { id: "ic_23", question: "Ashwatthama wants revenge and cannot be controlled. Do you release him?",
     a: { text: "Yes — his rage is a weapon. Direct it at the enemy.", ideology: "danda", resources: { shakti: 3 } },
     b: { text: "No — uncontrolled wrath destroys friend and foe alike.", ideology: "dharma", resources: { satya: 2, kirti: 1 } } },
-  { id: "ic_24", question: "sanjaya's divine sight lets him report the battle in real time. Do you use this advantage?",
+  { id: "ic_24", question: "Sanjaya's divine sight lets him report the battle in real time. Do you use this advantage?",
     a: { text: "Yes — information in battle is everything.", ideology: "artha", resources: { swarna: 2, kirti: 1 } },
     b: { text: "Let the battle unfold — interfering with divine gifts brings misfortune.", ideology: "dharma", resources: { satya: 3 } } },
   { id: "ic_25", question: "A merchant offers to fund your army in exchange for exclusive trade rights. Do you agree?",
@@ -96,7 +96,7 @@ const IDEOLOGY_CARDS = [
     a: { text: "Yes — his knowledge of the enemy's plans is invaluable.", ideology: "artha", resources: { swarna: 2, shakti: 1 } },
     b: { text: "No — a man who betrays once will betray again.", ideology: "dharma", resources: { satya: 2, kirti: 1 } } },
   { id: "ic_29", question: "Bhima wants to break Duryodhana's thigh in violation of the mace duel rules. Do you stop him?",
-    a: { text: "stop him — victory without honour is not victory.", ideology: "dharma", resources: { satya: 3 } },
+    a: { text: "Stop him — victory without honour is not victory.", ideology: "dharma", resources: { satya: 3 } },
     b: { text: "Let him — the enemy earned no mercy. Win however you must.", ideology: "danda", resources: { shakti: 2, swarna: 1 } } },
   { id: "ic_30", question: "The elders advise patience. The young warriors want immediate battle. Whom do you heed?",
     a: { text: "The elders — wisdom and patience win long campaigns.", ideology: "sama", resources: { kirti: 2, satya: 1 } },
@@ -139,7 +139,7 @@ const IDEOLOGY_CARDS = [
     b: { text: "No — decisions must be made swiftly. Hearings weaken authority.", ideology: "danda", resources: { shakti: 2, swarna: 1 } } },
   { id: "ic_43", question: "You discover a hidden treasury left by the old dynasty. How do you use it?",
     a: { text: "Rebuild the kingdom — the people need roads, wells, and granaries.", ideology: "dharma", resources: { satya: 2, kirti: 1 } },
-    b: { text: "strengthen the army first — security before prosperity.", ideology: "danda", resources: { shakti: 2, swarna: 1 } } },
+    b: { text: "Strengthen the army first — security before prosperity.", ideology: "danda", resources: { shakti: 2, swarna: 1 } } },
   { id: "ic_44", question: "A nagarika (city dweller) movement demands more rights. Do you grant them?",
     a: { text: "Yes — a king governs by the will and welfare of all.", ideology: "sama", resources: { kirti: 2, satya: 1 } },
     b: { text: "No — granting too much too quickly breeds disorder.", ideology: "artha", resources: { swarna: 2, shakti: 1 } } },
@@ -180,65 +180,65 @@ const IDEOLOGY_CARDS = [
 
 // ─── Ally Cards (Warriors & Factions) ────────────────────────────────────────
 
-const VOTER_CARDS = [
-  { id: "vc_01", voterCount: 1, cost: { swarna: 1 },                         label: "Village Merchant" },
-  { id: "vc_02", voterCount: 1, cost: { satya: 1 },                           label: "Gram Pradhan" },
-  { id: "vc_03", voterCount: 1, cost: { shakti: 1 },                          label: "senapati's Aide" },
-  { id: "vc_04", voterCount: 1, cost: { kirti: 1 },                           label: "Court Poet" },
-  { id: "vc_05", voterCount: 2, cost: { swarna: 1, shakti: 1 },              label: "Vaishya Guild" },
-  { id: "vc_06", voterCount: 2, cost: { satya: 1, kirti: 1 },                 label: "sabha Council" },
-  { id: "vc_07", voterCount: 2, cost: { swarna: 2 },                         label: "Royal Treasury" },
-  { id: "vc_08", voterCount: 2, cost: { shakti: 2 },                          label: "Kshatriya Band" },
-  { id: "vc_09", voterCount: 2, cost: { satya: 2 },                           label: "Jana Sangha" },
-  { id: "vc_10", voterCount: 2, cost: { kirti: 2 },                           label: "Bard's Tale" },
-  { id: "vc_11", voterCount: 3, cost: { swarna: 2, satya: 1 },               label: "Merchant Alliance" },
-  { id: "vc_12", voterCount: 3, cost: { shakti: 2, kirti: 1 },                label: "War Drums" },
-  { id: "vc_13", voterCount: 3, cost: { satya: 2, swarna: 1 },               label: "Pilgrimage March" },
-  { id: "vc_14", voterCount: 3, cost: { kirti: 2, shakti: 1 },                label: "Royal Decree" },
-  { id: "vc_15", voterCount: 3, cost: { swarna: 1, shakti: 1, satya: 1 },   label: "samiti Bloc" },
-  { id: "vc_16", voterCount: 1, cost: { swarna: 2 },                         label: "Hired Scout" },
-  { id: "vc_17", voterCount: 1, cost: { shakti: 2 },                          label: "Gram Mukhiya" },
-  { id: "vc_18", voterCount: 1, cost: { kirti: 2 },                           label: "Court Dancer" },
-  { id: "vc_19", voterCount: 1, cost: { satya: 2 },                           label: "Village Hero" },
-  { id: "vc_20", voterCount: 2, cost: { swarna: 1, kirti: 1 },               label: "Royal Herald" },
-  { id: "vc_21", voterCount: 2, cost: { shakti: 1, satya: 1 },                label: "Border Guards" },
-  { id: "vc_22", voterCount: 2, cost: { swarna: 1, satya: 1 },               label: "Ashram Followers" },
-  { id: "vc_23", voterCount: 2, cost: { shakti: 1, kirti: 1 },                label: "Young Warriors" },
-  { id: "vc_24", voterCount: 3, cost: { swarna: 2, kirti: 1 },               label: "Proclamation Blitz" },
-  { id: "vc_25", voterCount: 3, cost: { shakti: 1, satya: 1, kirti: 1 },     label: "Praja Morcha" },
-  { id: "vc_26", voterCount: 4, cost: { swarna: 2, shakti: 2 },              label: "Rajya Yantra" },
-  { id: "vc_27", voterCount: 4, cost: { satya: 2, kirti: 2 },                 label: "Lok Andolan" },
-  { id: "vc_28", voterCount: 4, cost: { swarna: 2, satya: 1, shakti: 1 },   label: "Maha Sandhi" },
-  { id: "vc_29", voterCount: 1, cost: { swarna: 1, satya: 1 },               label: "Village Pandit" },
-  { id: "vc_30", voterCount: 2, cost: { swarna: 3 },                         label: "Raj Darbari" },
+const SOLDIER_CARDS = [
+  { id: "vc_01", soldierCount: 1, cost: { swarna: 1 },                         label: "Village Merchant" },
+  { id: "vc_02", soldierCount: 1, cost: { satya: 1 },                           label: "Gram Pradhan" },
+  { id: "vc_03", soldierCount: 1, cost: { shakti: 1 },                          label: "senapati's Aide" },
+  { id: "vc_04", soldierCount: 1, cost: { kirti: 1 },                           label: "Court Poet" },
+  { id: "vc_05", soldierCount: 2, cost: { swarna: 1, shakti: 1 },              label: "Vaishya Guild" },
+  { id: "vc_06", soldierCount: 2, cost: { satya: 1, kirti: 1 },                 label: "sabha Council" },
+  { id: "vc_07", soldierCount: 2, cost: { swarna: 2 },                         label: "Royal Treasury" },
+  { id: "vc_08", soldierCount: 2, cost: { shakti: 2 },                          label: "Kshatriya Band" },
+  { id: "vc_09", soldierCount: 2, cost: { satya: 2 },                           label: "Jana Sangha" },
+  { id: "vc_10", soldierCount: 2, cost: { kirti: 2 },                           label: "Bard's Tale" },
+  { id: "vc_11", soldierCount: 3, cost: { swarna: 2, satya: 1 },               label: "Merchant Alliance" },
+  { id: "vc_12", soldierCount: 3, cost: { shakti: 2, kirti: 1 },                label: "War Drums" },
+  { id: "vc_13", soldierCount: 3, cost: { satya: 2, swarna: 1 },               label: "Pilgrimage March" },
+  { id: "vc_14", soldierCount: 3, cost: { kirti: 2, shakti: 1 },                label: "Royal Decree" },
+  { id: "vc_15", soldierCount: 3, cost: { swarna: 1, shakti: 1, satya: 1 },   label: "samiti Bloc" },
+  { id: "vc_16", soldierCount: 1, cost: { swarna: 2 },                         label: "Hired Scout" },
+  { id: "vc_17", soldierCount: 1, cost: { shakti: 2 },                          label: "Gram Mukhiya" },
+  { id: "vc_18", soldierCount: 1, cost: { kirti: 2 },                           label: "Court Dancer" },
+  { id: "vc_19", soldierCount: 1, cost: { satya: 2 },                           label: "Village Hero" },
+  { id: "vc_20", soldierCount: 2, cost: { swarna: 1, kirti: 1 },               label: "Royal Herald" },
+  { id: "vc_21", soldierCount: 2, cost: { shakti: 1, satya: 1 },                label: "Border Guards" },
+  { id: "vc_22", soldierCount: 2, cost: { swarna: 1, satya: 1 },               label: "Ashram Followers" },
+  { id: "vc_23", soldierCount: 2, cost: { shakti: 1, kirti: 1 },                label: "Young Warriors" },
+  { id: "vc_24", soldierCount: 3, cost: { swarna: 2, kirti: 1 },               label: "Proclamation Blitz" },
+  { id: "vc_25", soldierCount: 3, cost: { shakti: 1, satya: 1, kirti: 1 },     label: "Praja Morcha" },
+  { id: "vc_26", soldierCount: 4, cost: { swarna: 2, shakti: 2 },              label: "Rajya Yantra" },
+  { id: "vc_27", soldierCount: 4, cost: { satya: 2, kirti: 2 },                 label: "Lok Andolan" },
+  { id: "vc_28", soldierCount: 4, cost: { swarna: 2, satya: 1, shakti: 1 },   label: "Maha Sandhi" },
+  { id: "vc_29", soldierCount: 1, cost: { swarna: 1, satya: 1 },               label: "Village Pandit" },
+  { id: "vc_30", soldierCount: 2, cost: { swarna: 3 },                         label: "Raj Darbari" },
 ];
 
 // ─── Maya Cards (Shakuni's Arsenal — bought blind) ───────────────────────────
 
 const CONSPIRACY_CARDS = [
-  { id: "cc_01", name: "shakuni's Dice",    desc: "Remove up to 2 enemy warriors from any unlocked kingdom.", effect: "remove_opponent_voter", cost: 4 },
-  { id: "cc_02", name: "Karna's Army",      desc: "Deploy 3 of your warriors into any one kingdom for free.", effect: "place_free_voters",     cost: 5 },
+  { id: "cc_01", name: "Shakuni's Dice",    desc: "Remove up to 2 enemy warriors from any unlocked kingdom.", effect: "remove_opponent_soldier", cost: 4 },
+  { id: "cc_02", name: "Karna's Army",      desc: "Deploy 3 of your warriors into any one kingdom for free.", effect: "place_free_soldiers",     cost: 5 },
   { id: "cc_03", name: "Drona's Silence",   desc: "Opponent loses 3 Kirti.",                                  effect: "steal_kirti",           cost: 4 },
   { id: "cc_04", name: "Treasury Raid",      desc: "Opponent loses 3 Swarna.",                               effect: "steal_swarna",         cost: 4 },
   { id: "cc_05", name: "Sage's Counsel",   desc: "Gain 3 Satya immediately.",                               effect: "gain_satya",            cost: 4 },
   { id: "cc_06", name: "Bhima's Roar",      desc: "Gain 3 Shakti immediately.",                              effect: "gain_shakti",           cost: 4 },
   { id: "cc_07", name: "Hidden Wealth",      desc: "Gain 4 Swarna immediately.",                             effect: "gain_swarna",          cost: 4 },
-  { id: "cc_08", name: "Vidura's Wisdom",   desc: "Move any 1 non-majority warrior to a bordering kingdom.", effect: "swing_vote",            cost: 5 },
-  { id: "cc_09", name: "spy Network",        desc: "steal 2 resources from opponent's richest reserve.",     effect: "steal_resources",       cost: 5 },
+  { id: "cc_08", name: "Vidura's Wisdom",   desc: "Move any 1 non-majority warrior to a bordering kingdom.", effect: "defect_soldier",            cost: 5 },
+  { id: "cc_09", name: "Spy Network",        desc: "Steal 2 resources from opponent's richest reserve.",     effect: "steal_resources",       cost: 5 },
 ];
 
 // ─── Proclamation Cards (triggered by volatile kingdom entry) ─────────────────
 
 const HEADLINE_CARDS = [
-  { id: "hl_01", title: "soldiers Desert!",       desc: "Lose 3 Shakti — your warriors lose faith.",            effect: "lose_shakti",       value: 3, good: false },
+  { id: "hl_01", title: "Soldiers Desert!",       desc: "Lose 3 Shakti — your warriors lose faith.",            effect: "lose_shakti",       value: 3, good: false },
   { id: "hl_02", title: "Treasury Plundered",     desc: "Lose 3 Swarna — the royal vault is raided.",          effect: "lose_swarna",      value: 3, good: false },
   { id: "hl_03", title: "Bards Curse You",        desc: "Lose 3 Kirti — your name is blackened in song.",       effect: "lose_kirti",        value: 3, good: false },
   { id: "hl_04", title: "People's Wrath",        desc: "Lose 3 Satya — the people doubt your dharma.",         effect: "lose_satya",        value: 3, good: false },
-  { id: "hl_05", title: "Warrior Expelled",       desc: "The warrior who just entered is immediately removed.",  effect: "remove_voter",      value: 1, good: false },
+  { id: "hl_05", title: "Warrior Expelled",       desc: "The warrior who just entered is immediately removed.",  effect: "remove_soldier",      value: 1, good: false },
   { id: "hl_06", title: "Dual Scandal",           desc: "Lose 2 Swarna and 2 Shakti — war and wealth fail.",   effect: "lose_funds_clout",  value: 2, good: false },
   { id: "hl_07", title: "Dharma Questioned",      desc: "Lose 2 Satya and 1 Kirti — your virtue is doubted.",   effect: "lose_trust_media",  value: 2, good: false },
   { id: "hl_08", title: "Exposed by Sanjaya",     desc: "Lose 4 resources from your largest reserve.",          effect: "lose_largest",      value: 4, good: false },
-  { id: "hl_09", title: "Divine Favour!",         desc: "Place 1 free warrior here — the gods smile on you.",   effect: "place_voter",       value: 1, good: true  },
+  { id: "hl_09", title: "Divine Favour!",         desc: "Place 1 free warrior here — the gods smile on you.",   effect: "place_soldier",       value: 1, good: true  },
   { id: "hl_10", title: "People's Champion!",    desc: "Gain 2 Satya — the people rally to your cause.",       effect: "gain_satya",        value: 2, good: true  },
 ];
 
@@ -252,7 +252,7 @@ const IDEOLOGY_POWERS = {
   ],
   danda: [
     { at: 2, name: "Passive Income",       desc: "+1 Shakti each turn for every 2 Danda cards." },
-    { at: 3, name: "shakuni's Gambit",    desc: "Once per turn: seize 2 resources from opponent." },
+    { at: 3, name: "Shakuni's Gambit",    desc: "Once per turn: seize 2 resources from opponent." },
     { at: 5, name: "Ashwatthama's Wrath", desc: "Once per turn: discard 2 enemy warriors from any unlocked kingdom." },
   ],
   sama: [
@@ -367,8 +367,8 @@ function checkWin(zones) {
   return 0;
 }
 
-// Apply voter cost reductions from ideology powers
-function getVoterCost(player, baseCost) {
+// Apply soldier cost reductions from ideology powers
+function getSoldierCost(player, baseCost) {
   const cost = { ...baseCost };
   // Level 3 progressive: Helping Hands — 2 discounts per turn, only after power is activated
   if (player.helpingHandsActive && (player.helpingHandsUsed || 0) < 2) {
@@ -403,12 +403,6 @@ function ok(state) {
 function err(msg)  { return { ok: false, error: msg }; }
 
 function syncSoldierCards(state) {
-  if (Array.isArray(state.voterCards)) {
-    state.soldierCards = state.voterCards;
-  } else if (Array.isArray(state.soldierCards)) {
-    state.voterCards = state.soldierCards;
-  } else {
-    state.voterCards = [];
     state.soldierCards = [];
   }
   return state;
@@ -427,7 +421,7 @@ function createInitialState(players) {
     usedPowers: {},  // tracks once-per-turn powers per key e.g. { donations: true }
   });
 
-  const voterDeck    = shuffle([...VOTER_CARDS]);
+  const soldierDeck    = shuffle([...SOLDIER_CARDS]);
   const headlineDeck = shuffle(HEADLINE_CARDS.map(c => c.id));
 
   return syncSoldierCards({
@@ -437,12 +431,12 @@ function createInitialState(players) {
     turn:          1,
     phase:         "ideology",
     currentCard:   null,
-    voterCards:    voterDeck.slice(0, 4),
-    voterDeck:     voterDeck.slice(4).map(c => c.id),
+    soldierCards:    soldierDeck.slice(0, 4),
+    soldierDeck:     soldierDeck.slice(4).map(c => c.id),
     cardDeck:      shuffle(IDEOLOGY_CARDS.map(c => c.id)),
     conspiracyDeck: shuffle(CONSPIRACY_CARDS.map(c => c.id)),
     headlineDeck,
-    pendingHeadline: null,   // set when a voter enters volatile zone
+    pendingHeadline: null,   // set when a soldier enters volatile zone
     log:           [],
     winner:        null,
     scores:        { 1: 0, 2: 0 },
@@ -487,7 +481,7 @@ function answerCard(state, slot, choice) {
 
   clampResources(player);
 
-  // Check Level 5 populist: place 1 free voter after answering
+  // Check Level 5 populist: place 1 free soldier after answering
   const freePegZone = player.ideologyCards.sama >= 5
     ? s.zones.findIndex(z => z.pegs.length < z.capacity && checkMajority(z) === null)
     : -1;
@@ -502,38 +496,38 @@ function answerCard(state, slot, choice) {
   if (freePegZone >= 0) {
     s.zones[freePegZone].pegs.push(slot);
     s.log.unshift({ turn: s.turn, slot, type: "power",
-      text: `${player.username} placed 1 free voter (Cult Following) in ${s.zones[freePegZone].name}` });
+      text: `${player.username} placed 1 free soldier (Cult Following) in ${s.zones[freePegZone].name}` });
   }
 
   s.currentCard = null;
   s.phase = "action";
   player.usedPowers = {};
-  s.voterCards = _refreshVoterCards(s);
+  s.soldierCards = _refreshSoldierCards(s);
 
   return ok(s);
 }
 
-// ─── Influence Voter Card ─────────────────────────────────────────────────────
+// ─── Influence Soldier Card ─────────────────────────────────────────────────────
 
-function influenceVoterCard(state, slot, voterCardId, zoneIndex) {
+function influenceSoldierCard(state, slot, soliderCardId, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
 
   const s      = syncSoldierCards(JSON.parse(JSON.stringify(state)));
   const player = s.players.find(p => p.slot === slot);
   const zone   = s.zones[zoneIndex];
-  const cardPool = Array.isArray(s.voterCards) && s.voterCards.length > 0 ? s.voterCards : (s.soldierCards || []);
-  const card   = cardPool.find(c => c.id === voterCardId);
+  const cardPool = Array.isArray(s.soldierCards) && s.soldierCards.length > 0 ? s.soldierCards : (s.soldierCards || []);
+  const card   = cardPool.find(c => c.id === soldierCardId);
 
   if (!zone)  return err("Invalid zone");
   if (!card)  return err("Soldier card not available");
-  // Majority does NOT lock a zone — players can keep placing voters (affects incursion)
+  // Majority does NOT lock a zone — players can keep placing soldiers (affects incursion)
 
   const spacesLeft = zone.capacity - zone.pegs.length;
-  if (spacesLeft < card.voterCount) return err(`Need ${card.voterCount} spaces, only ${spacesLeft} left`);
+  if (spacesLeft < card.soldierCount) return err(`Need ${card.soldierCount} spaces, only ${spacesLeft} left`);
 
   // Apply power discounts
-  const cost = getVoterCost(player, card.cost);
+  const cost = getSoldierCost(player, card.cost);
   if (!canAfford(player, cost)) {
     return err(`Need ${Object.entries(cost).map(([r,v]) => `${v} ${r}`).join(", ")}`);
   }
@@ -545,23 +539,23 @@ function influenceVoterCard(state, slot, voterCardId, zoneIndex) {
     if (player.helpingHandsUsed >= 2) player.helpingHandsActive = false;
   }
 
-  // Level 3 populist: Going Viral — +1 extra voter per card
-  const extraVoters = player.ideologyCards.sama >= 3 ? 1 : 0;
-  const totalVoters = card.voterCount + extraVoters;
+  // Level 3 populist: Going Viral — +1 extra soldier per card
+  const extraSoldiers = player.ideologyCards.sama >= 3 ? 1 : 0;
+  const totalSoldiers = card.soldierCount + extraSoldiers;
   const actualSpacesLeft = zone.capacity - zone.pegs.length;
-  const votersToPlace = Math.min(totalVoters, actualSpacesLeft);
+  const soldiersToPlace = Math.min(totalSoldiers, actualSpacesLeft);
 
   // Level 5 populist: Election Fever — +1 incursion/zone
   if (player.ideologyCards.sama >= 5) {
     s.electionFeverActive = true;
   }
 
-  // Place voters — last slot in zone is volatile, triggers headline against the placer
+  // Place soldiers — last slot in zone is volatile, triggers headline against the placer
   const volatileSlotIndex = zone.capacity - 1; // last slot is volatile
-  for (let i = 0; i < votersToPlace; i++) {
+  for (let i = 0; i < soldiersToPlace; i++) {
     const filledSlotIndex = zone.pegs.length; // index before pushing
     zone.pegs.push(slot);
-    // If this voter filled the volatile slot (last slot), trigger headline
+    // If this soldier filled the volatile slot (last slot), trigger headline
     if (filledSlotIndex === volatileSlotIndex && !s.pendingHeadline) {
       // Reshuffle deck if exhausted
       if (s.headlineDeck.length === 0) {
@@ -575,30 +569,26 @@ function influenceVoterCard(state, slot, voterCardId, zoneIndex) {
     }
   }
 
-  s.log.unshift({ turn: s.turn, slot, type: "influence_voter",
-    text: `${player.username} placed ${votersToPlace} voter${votersToPlace > 1 ? "s" : ""} (${card.label}) in ${zone.name}` });
+  s.log.unshift({ turn: s.turn, slot, type: "influence_soldier",
+    text: `${player.username} placed ${soldiersToPlace} soldier${soldiersToPlace > 1 ? "s" : ""} (${card.label}) in ${zone.name}` });
 
-  // Replace used voter card
-  s.voterCards = s.voterCards.filter(c => c.id !== voterCardId);
+  // Replace used soldier card
+  s.soldierCards = s.soldierCards.filter(c => c.id !== soldierCardId);
   // Reshuffle if deck is empty
-  if (s.voterDeck.length === 0) {
-    const currentIds = new Set(s.voterCards.map(c => c.id));
-    s.voterDeck = shuffle(VOTER_CARDS.filter(c => !currentIds.has(c.id)).map(c => c.id));
-    s.log.unshift({ turn: s.turn, slot, type: "info", text: "🔄 Voter card deck reshuffled." });
+  if (s.soldierDeck.length === 0) {
+    const currentIds = new Set(s.soldierCards.map(c => c.id));
+    s.soldierDeck = shuffle(SOLDIER_CARDS.filter(c => !currentIds.has(c.id)).map(c => c.id));
+    s.log.unshift({ turn: s.turn, slot, type: "info", text: "🔄 Soldier card deck reshuffled." });
   }
-  const newId = s.voterDeck.shift();
-  const newCard = VOTER_CARDS.find(c => c.id === newId);
-  if (newCard) s.voterCards.push(newCard);
+  const newId = s.soldierDeck.shift();
+  const newCard = SOLDIER_CARDS.find(c => c.id === newId);
+  if (newCard) s.soldierCards.push(newCard);
 
   syncSoldierCards(s);
   return ok(_checkGameEnd(s));
 }
 
-function influenceSoldierCard(state, slot, soldierCardId, zoneIndex) {
-  return influenceVoterCard(state, slot, soldierCardId, zoneIndex);
-}
-
-// ─── progressive L3: Helping Hands — 2 discount tokens on voter cards ───────────
+// ─── progressive L3: Helping Hands — 2 discount tokens on soldier cards ───────────
 function helpingHands(state, slot) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
@@ -606,11 +596,11 @@ function helpingHands(state, slot) {
   const player = s.players.find(p => p.slot === slot);
   if (player.ideologyCards.dharma < 3) return err("Need 3 Dharma cards for Draupadi's Grace");
   if (player.usedPowers['helping_hands']) return err("Already used this power this turn");
-  player.helpingHandsActive = true;  // enables discount in getVoterCost
+  player.helpingHandsActive = true;  // enables discount in getSoldierCost
   player.helpingHandsUsed = 0;       // tracks how many of the 2 discounts used
   player.usedPowers['helping_hands'] = true;
   s.log.unshift({ turn: s.turn, slot, type: "power",
-    text: `${player.username} used Helping Hands — 2 voter card discounts active` });
+    text: `${player.username} used Helping Hands — 2 soldier card discounts active` });
   return ok(s);
 }
 
@@ -647,14 +637,14 @@ function resolveHeadline(state, slot) {
       player[richest] = Math.max(0, player[richest] - headline.value);
       break;
     }
-    case "remove_voter": {
+    case "remove_soldier": {
       const zone = s.zones.find(z => z.name === headline.zoneName);
       if (zone && zone.pegs.includes(headline.triggerSlot)) {
         zone.pegs.splice(zone.pegs.lastIndexOf(headline.triggerSlot), 1);
       }
       break;
     }
-    case "remove_voter_and_shakti": {
+    case "remove_soldier_and_shakti": {
       const zone = s.zones.find(z => z.name === headline.zoneName);
       if (zone && zone.pegs.includes(headline.triggerSlot)) {
         zone.pegs.splice(zone.pegs.lastIndexOf(headline.triggerSlot), 1);
@@ -662,7 +652,7 @@ function resolveHeadline(state, slot) {
       player.shakti = Math.max(0, player.shakti - 1);
       break;
     }
-    case "place_voter": {
+    case "place_soldier": {
       const zone = s.zones.find(z => z.name === headline.zoneName);
       if (zone && zone.pegs.length < zone.capacity) {
         zone.pegs.push(headline.triggerSlot);
@@ -816,14 +806,14 @@ function useConspiracy(state, slot, instanceId, params = {}) {
   const card = player.conspiracies[cardIdx];
 
   switch (card.effect) {
-    case "remove_opponent_voter": {
+    case "remove_opponent_soldier": {
       const zoneIndex = params.zoneIndex ?? s.zones.findIndex(z => z.pegs.includes(oppSlot) && checkMajority(z) === null);
       const zone = s.zones[zoneIndex];
       if (!zone) return err("No valid target zone");
       if (checkMajority(zone) !== null) return err("Zone is locked");
-      // Level 3 nationalist protects majority voters
+      // Level 3 nationalist protects majority soldiers
       const isProtected = opp?.ideologyCards?.danda >= 3 && checkMajority(zone) === oppSlot;
-      if (isProtected) return err("Opponent's majority voters are protected by Stronghold");
+      if (isProtected) return err("Opponent's majority soldiers are protected by Stronghold");
       let removed = 0;
       while (removed < 2 && zone.pegs.includes(oppSlot)) {
         zone.pegs.splice(zone.pegs.lastIndexOf(oppSlot), 1); removed++;
@@ -832,7 +822,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
         text: `${player.username} ran Smear Campaign — removed ${removed} of ${opp.username}'s soldiers from ${zone.name}` });
       break;
     }
-    case "place_free_voters": {
+    case "place_free_soldiers": {
       const zoneIdx = params.zoneIndex ?? s.zones.findIndex(z => z.pegs.length + 3 <= z.capacity && checkMajority(z) === null);
       const zone = s.zones[zoneIdx];
       if (!zone || checkMajority(zone) !== null) return err("No valid zone");
@@ -847,7 +837,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
     case "gain_satya":    player.satya  += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Sage's Counsel (+3 Satya)` }); break;
     case "gain_shakti":   player.shakti += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Bhima's Roar (+3 Shakti)` }); break;
     case "gain_swarna":  player.swarna += 4; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} revealed Hidden Wealth (+4 Swarna)` }); break;
-    case "swing_vote": {
+    case "defecet_soldier": {
       const { fromZone, toZone, pegOwner } = params;
       if (fromZone === undefined || toZone === undefined || pegOwner === undefined) return err("Needs fromZone, toZone, pegOwner");
       const fz = s.zones[fromZone], tz = s.zones[toZone];
@@ -859,7 +849,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
       const pi = fz.pegs.lastIndexOf(pegOwner);
       if (pi === -1) return err("No such soldier in that zone");
       fz.pegs.splice(pi, 1); tz.pegs.push(pegOwner);
-      s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} used Swing Vote` });
+      s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} used Defect Soldier` });
       // Headline if this move fills the last slot
       if (tz.pegs.length === tz.capacity && !s.pendingHeadline) {
         if (s.headlineDeck.length === 0) s.headlineDeck = shuffle(HEADLINE_CARDS.map(c => c.id));
@@ -880,7 +870,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
         text: `${player.username} used Opposition Research — stole ${stolen} ${richest} from ${opp.username}` });
       break;
     }
-    case "convert_voter": {
+    case "convert_soldier": {
       // Level 5 nationalist power
       const zoneIdx = params.zoneIndex ?? s.zones.findIndex(z => incursionRights(z) === slot && z.pegs.includes(oppSlot));
       const zone = s.zones[zoneIdx];
@@ -1082,20 +1072,20 @@ function _advanceTurn(state) {
   return state;
 }
 
-function _refreshVoterCards(state) {
+function _refreshSoldierCards(state) {
   syncSoldierCards(state);
   // Keep any cards already showing, fill up to 4 from deck
-  const needed = 4 - state.voterCards.length;
-  if (needed <= 0) return state.voterCards;
+  const needed = 4 - state.soldierCards.length;
+  if (needed <= 0) return state.soldierCards;
   // Reshuffle deck if not enough cards
-  if (state.voterDeck.length < needed) {
-    const currentIds = new Set(state.voterCards.map(c => c.id));
-    const deckIds    = new Set(state.voterDeck);
-    const remaining  = VOTER_CARDS.filter(c => !currentIds.has(c.id) && !deckIds.has(c.id)).map(c => c.id);
-    state.voterDeck  = [...state.voterDeck, ...shuffle(remaining)];
+  if (state.soldierDeck.length < needed) {
+    const currentIds = new Set(state.soldierCards.map(c => c.id));
+    const deckIds    = new Set(state.soldierDeck);
+    const remaining  = SOLDIER_CARDS.filter(c => !currentIds.has(c.id) && !deckIds.has(c.id)).map(c => c.id);
+    state.soldierDeck  = [...state.soldierDeck, ...shuffle(remaining)];
   }
-  const drawn = state.voterDeck.splice(0, needed);
-  return [...state.voterCards, ...drawn.map(id => VOTER_CARDS.find(c => c.id === id)).filter(Boolean)];
+  const drawn = state.soldierDeck.splice(0, needed);
+  return [...state.soldierCards, ...drawn.map(id => SOLDIER_CARDS.find(c => c.id === id)).filter(Boolean)];
 }
 
 // ─── Exports ──────────────────────────────────────────────────────────────────
@@ -1104,7 +1094,6 @@ module.exports = {
   createInitialState,
   drawCard,
   answerCard,
-  influenceVoterCard,
   influenceSoldierCard,
   incursion,
   buyConspiracy,
@@ -1124,7 +1113,6 @@ module.exports = {
   getScores,
   dominantIdeology,
   IDEOLOGY_CARDS,
-  VOTER_CARDS,
   CONSPIRACY_CARDS,
   getConspiracyCost,
   HEADLINE_CARDS,
