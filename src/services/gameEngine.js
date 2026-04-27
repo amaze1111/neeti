@@ -404,8 +404,7 @@ function err(msg)  { return { ok: false, error: msg }; }
 
 function syncSoldierCards(state) {
     state.soldierCards = [];
-  }
-  return state;
+    return state;
 }
 
 // ─── State Factory ────────────────────────────────────────────────────────────
