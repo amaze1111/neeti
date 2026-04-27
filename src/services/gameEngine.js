@@ -508,7 +508,7 @@ function answerCard(state, slot, choice) {
 
 // ─── Influence Soldier Card ─────────────────────────────────────────────────────
 
-function influenceSoldierCard(state, slot, soliderCardId, zoneIndex) {
+function influenceSoldierCard(state, slot, soldierCardId, zoneIndex) {
   if (state.phase !== "action")   return err("Not in action phase");
   if (state.currentSlot !== slot) return err("Not your turn");
 
@@ -836,7 +836,7 @@ function useConspiracy(state, slot, instanceId, params = {}) {
     case "gain_satya":    player.satya  += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Sage's Counsel (+3 Satya)` }); break;
     case "gain_shakti":   player.shakti += 3; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} invoked Bhima's Roar (+3 Shakti)` }); break;
     case "gain_swarna":  player.swarna += 4; clampResources(player); s.log.unshift({ turn: s.turn, slot, type: "conspiracy", text: `${player.username} revealed Hidden Wealth (+4 Swarna)` }); break;
-    case "defecet_soldier": {
+    case "defect_soldier": {
       const { fromZone, toZone, pegOwner } = params;
       if (fromZone === undefined || toZone === undefined || pegOwner === undefined) return err("Needs fromZone, toZone, pegOwner");
       const fz = s.zones[fromZone], tz = s.zones[toZone];
